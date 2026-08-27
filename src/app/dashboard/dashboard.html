@@ -1,0 +1,9 @@
+<div class="dashboard-layout">
+  <app-sidebar [collapsed]="sidebarCollapsed()" (toggle)="toggleSidebar()" />
+  <div class="main-content">
+    <app-navbar [pageTitle]="pageTitle()" (toggleSidebar)="toggleSidebar()" />
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

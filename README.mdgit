@@ -1,0 +1,1 @@
+# justshortlet-admin initgit add README.mdgit commit -m first commitgit branch -M maingit remote add origin https://github.com/Hardeygold205/justshortlet-admin.gitgit push -u origin main

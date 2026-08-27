@@ -1,0 +1,235 @@
+<div class="overview">
+  <div class="welcome">
+    <h1>Welcome back</h1>
+    <p>
+      Signed in as <strong>{{ authService.currentUser()?.email }}</strong>
+      <span class="role-tag" [class.super]="authService.isSuperAdmin()">
+        {{ authService.currentUser()?.role }}
+      </span>
+    </p>
+  </div>
+
+  @if (isLoading()) {
+  <div class="loading-state">
+    <div class="spinner-lg"></div>
+    <p>Loading metrics...</p>
+  </div>
+  } @else {
+  <div class="stats-grid">
+    <a routerLink="/dashboard/users" class="stat-card clickable">
+      <div class="stat-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().totalUsers }}</span>
+        <span class="stat-label">Total Users</span>
+      </div>
+    </a>
+
+    <a routerLink="/dashboard/hosts" class="stat-card clickable">
+      <div class="stat-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <polyline points="16 11 18 13 22 9" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().totalHosts }}</span>
+        <span class="stat-label">Total Hosts</span>
+      </div>
+    </a>
+
+    @if (authService.isSuperAdmin()) {
+    <a routerLink="/dashboard/admins" class="stat-card clickable">
+      <div class="stat-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().totalAdmins }}</span>
+        <span class="stat-label">Total Admins</span>
+      </div>
+    </a>
+    }
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().activeAccounts }}</span>
+        <span class="stat-label">Active Accounts</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().suspended }}</span>
+        <span class="stat-label">Suspended Accounts</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().allAccounts }}</span>
+        <span class="stat-label">Total Accounts</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h3>Recent Activities</h3>
+      <a routerLink="/dashboard/recent-activity" class="show-more"
+        >Show more →</a
+      >
+    </div>
+    @if (recentActivities().length === 0) {
+    <div class="empty-state">
+      <p>No activities found.</p>
+    </div>
+    } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>When</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (activity of recentActivities(); track activity.id) {
+          <tr>
+            <td>{{ activity.description }}</td>
+            <td><span class="badge">{{ activity.type }}</span></td>
+            <td
+              class="text-muted"
+              [class.active]="activity.category === 'AUTH'"
+            >
+              {{ activity.category }}
+            </td>
+            <td class="text-muted">{{ activity.createdAt | date:'short' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+
+  @if (authService.isSuperAdmin()) {
+  <div class="section">
+    <div class="section-header">
+      <h3>Recent Admins</h3>
+      <a routerLink="/dashboard/admins" class="show-more">Show more →</a>
+    </div>
+    @if (recentAdmins().length === 0) {
+    <div class="empty-state">
+      <p>No admin accounts found.</p>
+    </div>
+    } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (admin of recentAdmins(); track admin.id) {
+          <tr>
+            <td class="email-cell">{{ admin.email }}</td>
+            <td>
+              <span class="badge" [class.super]="admin.role === 'SUPER_ADMIN'"
+                >{{ admin.role }}</span
+              >
+            </td>
+            <td>
+              <span
+                class="status-pill"
+                [class.active]="admin.status === 'ACTIVE'"
+                [class.suspended]="admin.status === 'SUSPENDED'"
+                [class.disabled]="admin.status === 'DISABLED'"
+              >
+                <span class="dot"></span>
+                {{ admin.status || 'ACTIVE' }}
+              </span>
+            </td>
+            <td class="text-muted">{{ admin.createdAt | date:'short' }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
+  } }
+</div>

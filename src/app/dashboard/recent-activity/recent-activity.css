@@ -1,0 +1,172 @@
+.page-container {
+  padding: 2rem;
+  max-width: 1440px;
+  color: #fafafa;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.page-header {
+  margin-bottom: 1.75rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.3rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fafafa;
+  letter-spacing: -0.01em;
+}
+
+.page-header p {
+  margin: 0;
+  color: #737373;
+  font-size: 0.9rem;
+}
+
+.card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 700px;
+}
+
+.table th {
+  text-align: left;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #737373;
+  background: #000000;
+  border-bottom: 1px solid #1a1a1a;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #141414;
+  color: #a3a3a3;
+  vertical-align: middle;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: #171717;
+  color: #a3a3a3;
+  border: 1px solid #262626;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #a3a3a3;
+}
+
+.status-pill.active {
+  color: #60a5fa;
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  color: #737373;
+  gap: 0.75rem;
+}
+
+.state.error {
+  color: #f87171;
+}
+
+.empty {
+  text-align: center;
+  color: #525252;
+  padding: 2.5rem !important;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #262626;
+  border-top-color: #fafafa;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-secondary {
+  padding: 0.6rem 1rem;
+  background: #0a0a0a;
+  border: 1px solid #262626;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fafafa;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #1a1a1a;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  gap: 1rem;
+}
+
+.page-info {
+  color: #737373;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .page-container {
+    padding: 1rem;
+  }
+  .pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

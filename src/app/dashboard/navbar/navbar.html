@@ -1,0 +1,26 @@
+<header class="navbar">
+  <div class="navbar-left">
+    <h2 class="page-title">{{ pageTitle() }}</h2>
+  </div>
+
+  <div class="navbar-right">
+    <div class="user-menu">
+      <div class="user-chip">
+        <span class="role-badge" [class.super]="authService.isSuperAdmin()">
+          {{ authService.currentUser()?.role }}
+        </span>
+
+        <span class="email"> {{ authService.currentUser()?.email }} </span>
+      </div>
+
+      <!-- Logout -->
+      <button class="btn-logout" (click)="logout()" [disabled]="isLoggingOut()">
+        @if (isLoggingOut()) {
+        <lucide-icon [img]="LoaderCircle" [size]="16" class="loading-icon" />
+        } @else {
+        <lucide-icon [img]="LogOut" [size]="16" />
+        } {{ isLoggingOut() ? 'Logging out...' : 'Logout' }}
+      </button>
+    </div>
+  </div>
+</header>

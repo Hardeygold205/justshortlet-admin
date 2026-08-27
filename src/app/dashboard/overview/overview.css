@@ -1,0 +1,287 @@
+.overview {
+  padding: 2rem;
+  max-width: 1440px;
+  color: #fafafa;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.welcome {
+  margin-bottom: 2rem;
+}
+
+.welcome h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fafafa;
+  letter-spacing: -0.02em;
+}
+
+.welcome p {
+  margin: 0;
+  color: #737373;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.welcome p strong {
+  color: #d4d4d4;
+}
+
+.role-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: #a3a3a3;
+  border: 1px solid #262626;
+}
+
+.role-tag.super {
+  background: #fafafa;
+  color: #000000;
+  border: none;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: border-color 0.15s;
+  text-decoration: none;
+}
+
+.stat-card:hover {
+  border-color: #262626;
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #141414;
+  border: 1px solid #262626;
+  color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fafafa;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #737373;
+  font-weight: 700;
+}
+
+.section {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.section-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fafafa;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+th {
+  text-align: left;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  color: #737373;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #000000;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+td {
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #141414;
+  color: #a3a3a3;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.email-cell {
+  color: #fafafa;
+  font-weight: 500;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: #171717;
+  color: #a3a3a3;
+  border: 1px solid #262626;
+}
+
+.badge.super {
+  background: #fafafa;
+  color: #000000;
+  border: none;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #a3a3a3;
+}
+
+.status-pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #525252;
+  transition: background-color 0.15s;
+}
+
+.status-pill.active {
+  color: green;
+}
+.status-pill.active .dot {
+  background-color: green;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.status-pill.suspended {
+  color: red;
+}
+.status-pill.suspended .dot {
+  background-color: red;
+}
+
+.status-pill.disabled {
+  color: #525252;
+}
+.status-pill.disabled .dot {
+  background-color: #262626;
+}
+
+.text-muted.active {
+  color: #60a5fa;
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #737373;
+  gap: 1rem;
+}
+
+.spinner-lg {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #262626;
+  border-top-color: #fafafa;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-retry {
+  padding: 0.5rem 1.25rem;
+  background: #fafafa;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-retry:hover {
+  opacity: 0.88;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.show-more {
+  font-size: 0.8rem;
+  color: #a3a3a3;
+  text-decoration: none;
+}
+
+.show-more:hover {
+  color: #fafafa;
+}

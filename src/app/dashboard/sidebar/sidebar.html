@@ -1,0 +1,51 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-icon">
+        <span>D</span>
+      </div>
+      @if (!collapsed()) {
+      <span class="brand-text">Admin Dashboard</span>
+      }
+    </div>
+    <button class="toggle-btn" (click)="onToggle()" aria-label="Toggle Sidebar">
+      <lucide-icon
+        [img]="collapsed() ? PanelLeftOpen : PanelLeftClose"
+        [size]="20"
+      ></lucide-icon>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    @for (item of visibleItems; track item.path) {
+    <a
+      [routerLink]="item.path"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
+      class="nav-item"
+      [title]="collapsed() ? item.label : ''"
+    >
+      <span class="nav-icon">
+        <lucide-icon [img]="item.icon" [size]="20"></lucide-icon>
+      </span>
+      @if (!collapsed()) {
+      <span class="nav-label">{{ item.label }}</span>
+      }
+    </a>
+    }
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="avatar">
+        {{ authService.currentUser()?.email?.charAt(0)?.toUpperCase() || 'U' }}
+      </div>
+      @if (!collapsed()) {
+      <div class="user-meta">
+        <span class="user-email">{{ authService.currentUser()?.email }}</span>
+        <span class="user-role">{{ authService.currentUser()?.role }}</span>
+      </div>
+      }
+    </div>
+  </div>
+</aside>

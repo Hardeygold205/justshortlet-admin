@@ -1,0 +1,259 @@
+<div class="admins-page">
+  <div class="page-header">
+    <div>
+      <h1>Admins</h1>
+      <p>Create, update, and manage administrator accounts.</p>
+    </div>
+    <button class="btn-primary" (click)="openCreate()">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+      >
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+      Add Admin
+    </button>
+  </div>
+
+  @if (isLoading()) {
+  <div class="state">
+    <div class="spinner"></div>
+    <p>Loading admins...</p>
+  </div>
+  } @else if (error()) {
+  <div class="state error">
+    <p>{{ error() }}</p>
+    <button class="btn-secondary" (click)="loadAdmins()">Retry</button>
+  </div>
+  } @else {
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (admin of admins(); track admin.id) {
+          <tr>
+            <td class="font-medium text-white">{{ admin.email }}</td>
+            <td>
+              <span class="badge" [class.super]="admin.role === 'SUPER_ADMIN'">
+                {{ admin.role }}
+              </span>
+            </td>
+            <td>
+              <span
+                class="status-pill"
+                [class.active]="admin.status === 'ACTIVE'"
+                [class.suspended]="admin.status === 'SUSPENDED'"
+                [class.disabled]="admin.status === 'DISABLED'"
+              >
+                <span class="dot"></span>
+                {{ admin.status }}
+              </span>
+            </td>
+            <td class="text-muted">{{ admin.createdAt | date:'short' }}</td>
+            <td class="actions">
+              <button class="btn-icon" title="Edit" (click)="openEdit(admin)">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  />
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  />
+                </svg>
+              </button>
+              <button
+                class="btn-icon danger"
+                title="Delete"
+                (click)="openDeleteModal(admin)"
+                [disabled]="admin.id === authService.currentUser()?.id"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path
+                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                  />
+                </svg>
+              </button>
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="5" class="empty">No admins found</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- Create Modal -->
+@if (showCreateModal()) {
+<div class="modal-backdrop" (click)="closeModals()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Create Admin</h2>
+      <button class="btn-close" (click)="closeModals()">×</button>
+    </div>
+    <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Email *</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="admin@example.com"
+          />
+        </div>
+        <div class="form-group">
+          <label>Password *</label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Min 8 characters"
+          />
+        </div>
+        <div class="form-group">
+          <label>Role *</label>
+          <select formControlName="role">
+            <option value="ADMIN">ADMIN</option>
+            <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" formControlName="firstName" />
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" formControlName="lastName" />
+        </div>
+      </div>
+      @if (actionError()) {
+      <div class="form-error">{{ actionError() }}</div>
+      }
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closeModals()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="actionLoading()">
+          {{ actionLoading() ? 'Creating...' : 'Create Admin' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+
+<!-- Edit Modal -->
+@if (showEditModal()) {
+<div class="modal-backdrop" (click)="closeModals()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Edit Admin</h2>
+      <button class="btn-close" (click)="closeModals()">×</button>
+    </div>
+    <form [formGroup]="editForm" (ngSubmit)="submitEdit()">
+      <p class="edit-email">{{ selectedAdmin()?.email }}</p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Role *</label>
+          <select
+            formControlName="role"
+            [disabled]="selectedAdmin()?.id === authService.currentUser()?.id"
+          >
+            <option value="ADMIN">ADMIN</option>
+            <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+          </select>
+          @if (selectedAdmin()?.id === authService.currentUser()?.id) {
+          <span class="field-hint">You cannot modify your own role</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Status *</label>
+          <select formControlName="status">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="SUSPENDED">SUSPENDED</option>
+            <option value="DISABLED">DISABLED</option>
+          </select>
+        </div>
+      </div>
+      @if (actionError()) {
+      <div class="form-error">{{ actionError() }}</div>
+      }
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="closeModals()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="actionLoading()">
+          {{ actionLoading() ? 'Saving...' : 'Save Changes' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+
+<!-- Custom Delete Modal -->
+@if (showDeleteModal()) {
+<div class="modal-backdrop" (click)="closeModals()">
+  <div class="modal modal-sm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Confirm Deletion</h2>
+      <button class="btn-close" (click)="closeModals()">×</button>
+    </div>
+    <div class="modal-body">
+      <p>
+        Are you sure you want to delete administrator account
+        <strong>{{ adminToDelete()?.email }}</strong>?
+      </p>
+      <p class="text-warning">This action is permanent and cannot be undone.</p>
+    </div>
+    @if (actionError()) {
+    <div class="form-error">{{ actionError() }}</div>
+    }
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" (click)="closeModals()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn-danger"
+        [disabled]="actionLoading()"
+        (click)="confirmDelete()"
+      >
+        {{ actionLoading() ? 'Deleting...' : 'Delete Admin' }}
+      </button>
+    </div>
+  </div>
+</div>
+}

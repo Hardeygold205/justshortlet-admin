@@ -1,0 +1,78 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Recent Activities</h1>
+    <p>
+      Full activity log across the platform — account changes, bookings, and
+      system events.
+    </p>
+  </div>
+
+  @if (isLoading()) {
+  <div class="state"><div class="spinner"></div></div>
+  } @else if (error()) {
+  <div class="state error">
+    <p>{{ error() }}</p>
+    <button class="btn-secondary" (click)="loadActivities()">Retry</button>
+  </div>
+  } @else {
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Actor</th>
+            <th>When</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (activity of activities(); track activity.id) {
+          <tr>
+            <td>{{ activity.description }}</td>
+            <td><span class="badge">{{ activity.type }}</span></td>
+            <td>
+              <span
+                class="status-pill"
+                [class.active]="activity.category === 'AUTH'"
+              >
+                {{ activity.category }}
+              </span>
+            </td>
+            <td>{{ activity.actorEmail || activity.actorId || '—' }}</td>
+            <td>{{ activity.createdAt | date:'medium' }}</td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="5" class="empty">No activities found</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  @if (pagination()) {
+  <div class="pagination">
+    <button
+      class="btn-secondary"
+      [disabled]="!pagination()!.hasPrevPage"
+      (click)="prevPage()"
+    >
+      ← Previous
+    </button>
+    <span class="page-info">
+      Page {{ pagination()!.currentPage }} of {{ pagination()!.totalPages }} ({{
+      pagination()!.total }} total)
+    </span>
+    <button
+      class="btn-secondary"
+      [disabled]="!pagination()!.hasNextPage"
+      (click)="nextPage()"
+    >
+      Next →
+    </button>
+  </div>
+  } }
+</div>
