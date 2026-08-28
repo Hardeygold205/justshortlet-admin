@@ -40,7 +40,10 @@
                 {{ activity.category }}
               </span>
             </td>
-            <td>{{ activity.actorEmail || activity.actorId || '—' }}</td>
+            <td>
+              {{ activity.actorEmail || activity.metadata?.['phone'] ||
+              activity.actorId || '—' }}
+            </td>
             <td>{{ activity.createdAt | date:'medium' }}</td>
           </tr>
           } @empty {

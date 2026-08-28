@@ -5,8 +5,6 @@ import { AuthService } from '../../services/auth.service';
 import {
   LucideAngularModule,
   LayoutDashboard,
-  Shield,
-  Users,
   UserCheck,
   Building2,
   CalendarCheck,
@@ -16,6 +14,8 @@ import {
   PanelLeftOpen,
   LucideIconData,
   ActivityIcon,
+  ShieldUser,
+  UserRound,
 } from 'lucide-angular';
 
 interface NavItem {
@@ -49,10 +49,10 @@ export class Sidebar {
     {
       label: 'Admins',
       path: '/dashboard/admins',
-      icon: Shield,
+      icon: ShieldUser,
       superAdminOnly: true,
     },
-    { label: 'Users', path: '/dashboard/users', icon: Users },
+    { label: 'Guests', path: '/dashboard/guests', icon: UserRound },
     { label: 'Hosts', path: '/dashboard/hosts', icon: UserCheck },
     {
       label: 'Activities',

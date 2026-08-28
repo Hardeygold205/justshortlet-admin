@@ -19,7 +19,7 @@ export class Dashboard {
   private titleMap: Record<string, string> = {
     '/dashboard': 'Overview',
     '/dashboard/admins': 'Admin Management',
-    '/dashboard/users': 'Users Management',
+    '/dashboard/guests': 'Guests Management',
     '/dashboard/hosts': 'Hosts Management',
     '/dashboard/profile': 'Profile',
     '/dashboard/settings': 'Settings',

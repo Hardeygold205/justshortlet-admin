@@ -26,7 +26,7 @@ export class Overview implements OnInit {
   recentAdmins = signal<User[]>([]);
 
   stats = signal({
-    totalUsers: 0,
+    totalGuests: 0,
     totalHosts: 0,
     allAccounts: 0,
     totalAdmins: 0,
@@ -43,7 +43,7 @@ export class Overview implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (res) => {
         const all = res.users;
-        const usersCount = all.filter((u) => u.role === 'USER').length;
+        const guestsCount = all.filter((u) => u.role === 'GUEST').length;
         const hostsCount = all.filter((u) => u.role === 'HOST').length;
         const allCount = all.filter(
           (u) => u.role !== 'ADMIN' && u.role !== 'SUPER_ADMIN',
@@ -63,7 +63,7 @@ export class Overview implements OnInit {
 
         this.stats.update((s) => ({
           ...s,
-          totalUsers: usersCount,
+          totalGuests: guestsCount,
           totalHosts: hostsCount,
           activeAccounts: activeCount,
           allAccounts: allCount,

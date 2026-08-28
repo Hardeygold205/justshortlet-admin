@@ -10,13 +10,13 @@ import { UserService } from '../../services/users.service';
 import { User } from '../../models/user.model';
 
 @Component({
-  selector: 'app-users',
+  selector: 'app-guests',
   standalone: true,
   imports: [CommonModule, DatePipe, ReactiveFormsModule],
-  templateUrl: './users.html',
-  styleUrl: './users.css',
+  templateUrl: './guests.html',
+  styleUrl: './guests.css',
 })
-export class Users implements OnInit {
+export class Guests implements OnInit {
   private userService = inject(UserService);
   private fb = inject(FormBuilder);
 
@@ -32,7 +32,7 @@ export class Users implements OnInit {
   actionError = signal<string | null>(null);
 
   editForm: FormGroup = this.fb.group({
-    role: ['USER', Validators.required],
+    role: ['GUEST', Validators.required],
     status: ['ACTIVE', Validators.required],
   });
 
@@ -43,7 +43,7 @@ export class Users implements OnInit {
 
     const firstName = user.profile?.firstName || '';
     const lastName = user.profile?.lastName || '';
-    const fullName = `${firstName} ${lastName}`.trim() || user.email || 'User';
+    const fullName = `${firstName} ${lastName}`.trim() || user.email || 'Guest';
 
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=171717&color=fafafa`;
   }
@@ -56,7 +56,7 @@ export class Users implements OnInit {
     this.isLoading.set(true);
     this.userService.getAllUsers().subscribe({
       next: (res) => {
-        this.users.set(res.users.filter((u) => u.role === 'USER'));
+        this.users.set(res.users.filter((u) => u.role === 'GUEST'));
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),

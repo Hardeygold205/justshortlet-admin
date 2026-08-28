@@ -31,7 +31,7 @@
                 class="avatar"
               />
               <span
-                >{{ user.profile?.firstName || 'User' }} {{
+                >{{ user.profile?.firstName || 'Guest' }} {{
                 user.profile?.lastName }}</span
               >
             </td>
@@ -120,7 +120,7 @@
           <div class="form-group">
             <label>Role</label>
             <select formControlName="role">
-              <option value="USER">USER</option>
+              <option value="GUEST">USER</option>
               <option value="HOST">HOST (Upgrade)</option>
             </select>
             <span class="field-hint"

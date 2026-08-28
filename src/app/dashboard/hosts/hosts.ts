@@ -14,7 +14,7 @@ import { User } from '../../models/user.model';
   standalone: true,
   imports: [CommonModule, DatePipe, ReactiveFormsModule],
   templateUrl: './hosts.html',
-  styleUrl: '../users/users.css',
+  styleUrl: '../guests/guests.css',
 })
 export class Hosts implements OnInit {
   private userService = inject(UserService);
@@ -32,7 +32,7 @@ export class Hosts implements OnInit {
   actionError = signal<string | null>(null);
 
   editForm: FormGroup = this.fb.group({
-    role: ['USER', Validators.required],
+    role: ['GUEST', Validators.required],
     status: ['ACTIVE', Validators.required],
   });
 

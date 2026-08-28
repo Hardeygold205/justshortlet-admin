@@ -45,9 +45,9 @@ export const routes: Routes = [
         canActivate: [superAdminGuard],
       },
       {
-        path: 'users',
+        path: 'guests',
         loadComponent: () =>
-          import('./dashboard/users/users').then((m) => m.Users),
+          import('./dashboard/guests/guests').then((m) => m.Guests),
       },
       {
         path: 'profile',

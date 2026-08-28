@@ -6,10 +6,6 @@
   <div class="navbar-right">
     <div class="user-menu">
       <div class="user-chip">
-        <span class="role-badge" [class.super]="authService.isSuperAdmin()">
-          {{ authService.currentUser()?.role }}
-        </span>
-
         <span class="email"> {{ authService.currentUser()?.email }} </span>
       </div>
 
