@@ -203,6 +203,7 @@
 .table-responsive {
   width: 100%;
   overflow-x: auto;
+  border-radius: 12px;
 }
 .table {
   width: 100%;

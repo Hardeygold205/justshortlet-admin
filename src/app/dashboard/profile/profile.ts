@@ -94,10 +94,14 @@ export class Profile implements OnInit {
   }
 
   getAvatarUrl(user: User): string {
-    return (
-      user.profile?.avatarUrl ||
-      'https://ui-avatars.com/api/?name=' +
-        encodeURIComponent(user.email || user.phone || 'User')
-    );
+    if (user.profile?.avatarUrl) {
+      return user.profile.avatarUrl;
+    }
+
+    const firstName = user.profile?.firstName || '';
+    const lastName = user.profile?.lastName || '';
+    const fullName = `${firstName} ${lastName}`.trim() || user.email || 'Host';
+
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=171717&color=fafafa`;
   }
 }
