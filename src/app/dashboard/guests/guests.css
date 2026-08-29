@@ -423,6 +423,14 @@ form,
   border-top: 1px solid #1a1a1a;
 }
 
+.clickable-row {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.clickable-row:hover {
+  background: #101010;
+}
+
 /* Media Queries */
 @media (max-width: 640px) {
   .page-container {

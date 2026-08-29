@@ -1,4 +1,24 @@
-<aside class="sidebar" [class.collapsed]="collapsed()">
+@if (!mobileOpen()) {
+<button
+  class="mobile-hamburger"
+  (click)="toggleMobile()"
+  aria-label="Open menu"
+>
+  <lucide-icon [img]="Menu" [size]="22"></lucide-icon>
+</button>
+}
+
+<div
+  class="sidebar-overlay"
+  [class.visible]="mobileOpen()"
+  (click)="closeMobile()"
+></div>
+
+<aside
+  class="sidebar"
+  [class.collapsed]="collapsed()"
+  [class.mobile-open]="mobileOpen()"
+>
   <div class="sidebar-header">
     <div class="brand">
       <div class="brand-icon">
@@ -14,6 +34,13 @@
         [size]="20"
       ></lucide-icon>
     </button>
+    <button
+      class="close-btn-mobile"
+      (click)="closeMobile()"
+      aria-label="Close menu"
+    >
+      <lucide-icon [img]="X" [size]="20"></lucide-icon>
+    </button>
   </div>
 
   <nav class="sidebar-nav">
@@ -24,12 +51,48 @@
       [routerLinkActiveOptions]="{ exact: item.path === '/dashboard' }"
       class="nav-item"
       [title]="collapsed() ? item.label : ''"
+      (click)="closeMobile()"
     >
       <span class="nav-icon">
+        @if (item.path === '/dashboard/hosts') {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <circle cx="12" cy="11" r="3" />
+          <path d="M17 18a5 5 0 0 0-10 0" />
+        </svg>
+        } @else {
         <lucide-icon [img]="item.icon" [size]="20"></lucide-icon>
+        }
       </span>
+
       @if (!collapsed()) {
       <span class="nav-label">{{ item.label }}</span>
+      }
+    </a>
+    } @if (profileHistory.lastViewedUserId(); as lastId) {
+    <a
+      [routerLink]="['/dashboard/profile', lastId]"
+      routerLinkActive="active"
+      class="nav-item"
+      [title]="collapsed() ? 'Last viewed profile' : ''"
+      (click)="closeMobile()"
+    >
+      <span class="nav-icon">
+        <lucide-icon [img]="UserIcon" [size]="20"></lucide-icon>
+      </span>
+
+      @if (!collapsed()) {
+      <span class="nav-label">Profile</span>
       }
     </a>
     }

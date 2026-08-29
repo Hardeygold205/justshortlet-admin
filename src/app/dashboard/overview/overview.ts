@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -24,6 +24,7 @@ export class Overview implements OnInit {
   isLoading = signal<boolean>(true);
   recentActivities = signal<Activity[]>([]);
   recentAdmins = signal<User[]>([]);
+  users = signal<User[]>([]); // raw list, backing both stats and charts
 
   stats = signal({
     totalGuests: 0,
@@ -34,15 +35,74 @@ export class Overview implements OnInit {
     suspended: 0,
   });
 
+  // ── Role distribution donut ──────────────────────────────
+  roleDistribution = computed(() => {
+    const all = this.users();
+    const guests = all.filter((u) => u.role === 'GUEST').length;
+    const hosts = all.filter((u) => u.role === 'HOST').length;
+    const total = guests + hosts || 1;
+
+    return [
+      {
+        label: 'Guests',
+        value: guests,
+        percent: Math.round((guests / total) * 100),
+        color: '#fafafa',
+      },
+      {
+        label: 'Hosts',
+        value: hosts,
+        percent: Math.round((hosts / total) * 100),
+        color: '#525252',
+      },
+    ];
+  });
+
+  pieGradient = computed(() => {
+    let cumulative = 0;
+    const parts = this.roleDistribution().map((s) => {
+      const start = cumulative;
+      cumulative += s.percent;
+      return `${s.color} ${start}% ${cumulative}%`;
+    });
+    return `conic-gradient(${parts.join(', ')})`;
+  });
+
+  // ── Signup trend, last 7 days ─────────────────────────────
+  signupTrend = computed(() => {
+    const all = this.users();
+    const days: { label: string; count: number }[] = [];
+    const today = new Date();
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const dayKey = d.toISOString().split('T')[0];
+      const count = all.filter((u) => u.createdAt?.startsWith(dayKey)).length;
+      days.push({
+        label: d.toLocaleDateString('en-US', { weekday: 'short' }),
+        count,
+      });
+    }
+    return days;
+  });
+
+  maxSignupCount = computed(() =>
+    Math.max(...this.signupTrend().map((d) => d.count), 1),
+  );
+
   ngOnInit(): void {
     this.loadOverviewData();
   }
 
   loadOverviewData(): void {
     this.isLoading.set(true);
-    this.userService.getAllUsers().subscribe({
+
+    this.userService.getAllUsers({ limit:100 }).subscribe({
       next: (res) => {
         const all = res.users;
+        this.users.set(all);
+
         const guestsCount = all.filter((u) => u.role === 'GUEST').length;
         const hostsCount = all.filter((u) => u.role === 'HOST').length;
         const allCount = all.filter(

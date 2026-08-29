@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../environments/environment';
 import { User } from '../models/user.model';
@@ -22,6 +22,13 @@ interface PaginatedUsers {
   };
 }
 
+export interface UserQueryParams {
+  page?: number;
+  limit?: number;
+  role?: string;
+  status?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,40 +36,36 @@ export class UserService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/users`;
 
-  getAllUsers(): Observable<PaginatedUsers> {
+  getAllUsers(query?: UserQueryParams): Observable<PaginatedUsers> {
+    let params = new HttpParams();
+    if (query?.page) params = params.set('page', query.page);
+    if (query?.limit) params = params.set('limit', query.limit);
+    if (query?.role) params = params.set('role', query.role);
+    if (query?.status) params = params.set('status', query.status);
+
     return this.http
-      .get<ApiEnvelope<PaginatedUsers>>(this.baseUrl)
+      .get<ApiEnvelope<PaginatedUsers>>(this.baseUrl, { params })
       .pipe(map((res) => res.data));
   }
 
   getUserById(userId: string): Observable<User> {
     return this.http
-      .get<ApiEnvelope<User>>(`${environment.apiUrl}/${userId}`)
+      .get<ApiEnvelope<User>>(`${this.baseUrl}/${userId}`)
       .pipe(map((res) => res.data));
   }
 
-  // getActivities(
-  //   timeframe: '24h' | '7d' | '30d' = '7d',
-  //   limit = 10,
-  //   page = 1,
-  // ): Observable<ActivityResponse> {
-  //   const params = new HttpParams()
-  //     .set('timeframe', timeframe)
-  //     .set('limit', limit)
-  //     .set('page', page);
-  //   return this.http.get<ActivityResponse>(`${this.baseUrl}/activities`, {
-  //     params,
-  //   });
-  // }
-
   deleteUser(userId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${userId}`);
+    return this.http
+      .delete<ApiEnvelope<void>>(`${this.baseUrl}/${userId}`)
+      .pipe(map((res) => res.data));
   }
 
   updateUserRoleOrStatus(
     userId: string,
     data: Partial<User>,
   ): Observable<User> {
-    return this.http.patch<User>(`${this.baseUrl}/${userId}`, data);
+    return this.http
+      .patch<ApiEnvelope<User>>(`${this.baseUrl}/${userId}`, data)
+      .pipe(map((res) => res.data));
   }
 }

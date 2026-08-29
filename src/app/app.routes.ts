@@ -50,7 +50,7 @@ export const routes: Routes = [
           import('./dashboard/guests/guests').then((m) => m.Guests),
       },
       {
-        path: 'profile',
+        path: 'profile/:userId',
         loadComponent: () =>
           import('./dashboard/profile/profile').then((m) => m.Profile),
       },

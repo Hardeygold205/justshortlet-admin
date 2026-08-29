@@ -1,1 +1,196 @@
-<p>profile works!</p>
+<div class="page-container">
+  @if (isLoading()) {
+  <div class="state"><div class="spinner"></div></div>
+  } @else if (error()) {
+  <div class="state error">
+    <p>{{ error() }}</p>
+    <button class="btn-secondary" (click)="goBack()">← Go Back</button>
+  </div>
+  } @else { @if (user(); as u) {
+  <div class="page-header">
+    <button class="back-link" (click)="goBack()">← Go Back</button>
+  </div>
+
+  <div class="profile-header card">
+    <img [src]="getAvatarUrl(u)" class="profile-avatar" />
+    <div class="profile-identity">
+      <h1>{{ u.profile?.firstName || 'Guest' }} {{ u.profile?.lastName }}</h1>
+      <p class="username">&#64;{{ u.profile?.username || 'no-username' }}</p>
+      <div class="badges">
+        <span class="badge">{{ u.role }}</span>
+        <span
+          class="status-pill"
+          [class.active]="u.status === 'ACTIVE'"
+          [class.suspended]="u.status === 'SUSPENDED'"
+          [class.disabled]="u.status === 'DISABLED'"
+        >
+          <span class="dot"></span>{{ u.status }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="card detail-card">
+      <h3>Contact Information</h3>
+      <div class="detail-row">
+        <span class="label">Email</span>
+        <span class="value">
+          {{ u.email || '—' }} @if (u.email) {
+          <span class="verify-pill" [class.verified]="u.emailVerified">
+            {{ u.emailVerified ? 'Verified' : 'Unverified' }}
+          </span>
+          }
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Phone</span>
+        <span class="value">
+          {{ u.phone || '—' }} @if (u.phone) {
+          <span class="verify-pill" [class.verified]="u.phoneVerified">
+            {{ u.phoneVerified ? 'Verified' : 'Unverified' }}
+          </span>
+          }
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Sign-up Method</span>
+        <span class="value">{{ u.provider }}</span>
+      </div>
+    </div>
+
+    <div class="card detail-card">
+      <h3>Identity</h3>
+      <div class="detail-row">
+        <span class="label">ID Verified</span>
+        <span class="value">
+          <span class="verify-pill" [class.verified]="u.profile?.idVerified">
+            {{ u.profile?.idVerified ? 'Verified' : 'Not verified' }}
+          </span>
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Address Verified</span>
+        <span class="value">
+          <span
+            class="verify-pill"
+            [class.verified]="u.profile?.addressVerified"
+          >
+            {{ u.profile?.addressVerified ? 'Verified' : 'Not verified' }}
+          </span>
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Date of Birth</span>
+        <span class="value"
+          >{{ (u.profile?.dob | date:'mediumDate') || '—' }}</span
+        >
+      </div>
+    </div>
+
+    <div class="card detail-card">
+      <h3>Location</h3>
+      <div class="detail-row">
+        <span class="label">Address</span>
+        <span class="value">{{ u.profile?.address || '—' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">City</span>
+        <span class="value">{{ u.profile?.city || '—' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">State</span>
+        <span class="value">{{ u.profile?.state || '—' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Country</span>
+        <span class="value">{{ u.profile?.country || '—' }}</span>
+      </div>
+    </div>
+
+    <div class="card detail-card">
+      <h3>Account</h3>
+      <div class="detail-row">
+        <span class="label">User ID</span>
+        <span class="value mono">{{ u.id }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Joined</span>
+        <span class="value">{{ u.createdAt | date:'medium' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Last Updated</span>
+        <span class="value">{{ u.updatedAt | date:'medium' }}</span>
+      </div>
+    </div>
+
+    @if (u.profile?.bio) {
+    <div class="card detail-card full-width">
+      <h3>Bio</h3>
+      <p class="bio-text">{{ u.profile?.bio }}</p>
+    </div>
+    }
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h3>Activity History</h3>
+    </div>
+
+    @if (isActivityLoading()) {
+    <div class="state"><div class="spinner"></div></div>
+    } @else if (activities().length === 0) {
+    <div class="empty-state"><p>No activity recorded for this user.</p></div>
+    } @else {
+    <div class="activity-card">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (activity of activities(); track activity.id) {
+            <tr>
+              <td>{{ activity.description }}</td>
+              <td><span class="badge">{{ activity.type }}</span></td>
+              <td class="text-muted">{{ activity.category }}</td>
+              <td class="text-muted">
+                {{ activity.createdAt | date:'short' }}
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    @if (pagination()) {
+    <div class="pagination">
+      <button
+        class="btn-secondary"
+        [disabled]="!pagination()!.hasPrevPage"
+        (click)="prevPage()"
+      >
+        ← Previous
+      </button>
+      <span class="page-info"
+        >Page {{ pagination()!.currentPage }} of {{ pagination()!.totalPages
+        }}</span
+      >
+      <button
+        class="btn-secondary"
+        [disabled]="!pagination()!.hasNextPage"
+        (click)="nextPage()"
+      >
+        Next →
+      </button>
+    </div>
+    } }
+  </div>
+  } }
+</div>

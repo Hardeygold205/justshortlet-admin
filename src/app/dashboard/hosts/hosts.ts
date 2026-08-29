@@ -8,11 +8,12 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../services/users.service';
 import { User } from '../../models/user.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-hosts',
   standalone: true,
-  imports: [CommonModule, DatePipe, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, RouterLink],
   templateUrl: './hosts.html',
   styleUrl: '../guests/guests.css',
 })
@@ -43,7 +44,7 @@ export class Hosts implements OnInit {
 
     const firstName = user.profile?.firstName || '';
     const lastName = user.profile?.lastName || '';
-    const fullName = `${firstName} ${lastName}`.trim() || user.email || 'User';
+    const fullName = `${firstName} ${lastName}`.trim() || user.email || 'Host';
 
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=171717&color=fafafa`;
   }

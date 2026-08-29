@@ -23,7 +23,10 @@
         </thead>
         <tbody>
           @for (user of users(); track user.id) {
-          <tr>
+          <tr
+            [routerLink]="['/dashboard/profile', user.id]"
+            class="clickable-row"
+          >
             <td class="user-cell">
               <img
                 [src]="getAvatarUrl(user)"
@@ -37,9 +40,7 @@
             </td>
             <td>{{ user.email || '—' }}</td>
             <td>{{ user.phone || '—' }}</td>
-            <td>
-              <span class="badge">{{ user.role }}</span>
-            </td>
+            <td><span class="badge">{{ user.role }}</span></td>
             <td>
               <span
                 class="status-pill"
@@ -52,7 +53,7 @@
               </span>
             </td>
             <td>{{ user.createdAt | date:'shortDate' }}</td>
-            <td class="actions">
+            <td class="actions" (click)="$event.stopPropagation()">
               <button
                 class="btn-icon"
                 title="Edit User"

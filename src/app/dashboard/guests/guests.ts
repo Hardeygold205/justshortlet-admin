@@ -8,11 +8,12 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../services/users.service';
 import { User } from '../../models/user.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-guests',
   standalone: true,
-  imports: [CommonModule, DatePipe, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, RouterLink],
   templateUrl: './guests.html',
   styleUrl: './guests.css',
 })

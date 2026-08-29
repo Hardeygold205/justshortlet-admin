@@ -1,14 +1,14 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ProfileHistoryService } from '../../services/profile-history.service';
 import {
   LucideAngularModule,
   LayoutDashboard,
-  UserCheck,
   Building2,
   CalendarCheck,
-  User,
+  User as UserIcon,
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
@@ -16,12 +16,14 @@ import {
   ActivityIcon,
   ShieldUser,
   UserRound,
+  Menu,
+  X,
 } from 'lucide-angular';
 
 interface NavItem {
   label: string;
   path: string;
-  icon: LucideIconData;
+  icon?: LucideIconData;
   superAdminOnly?: boolean;
 }
 
@@ -34,16 +36,18 @@ interface NavItem {
 })
 export class Sidebar {
   authService = inject(AuthService);
+  profileHistory = inject(ProfileHistoryService);
 
-  // Angular Signal I/O setup
   collapsed = input<boolean>(false);
   toggle = output<void>();
+  mobileOpen = signal(false);
 
-  // Icon References
   readonly PanelLeftClose = PanelLeftClose;
   readonly PanelLeftOpen = PanelLeftOpen;
+  readonly Menu = Menu;
+  readonly X = X;
+  readonly UserIcon = UserIcon;
 
-  // Complete Dashboard Nav Items
   navItems: NavItem[] = [
     { label: 'Overview', path: '/dashboard', icon: LayoutDashboard },
     {
@@ -53,7 +57,7 @@ export class Sidebar {
       superAdminOnly: true,
     },
     { label: 'Guests', path: '/dashboard/guests', icon: UserRound },
-    { label: 'Hosts', path: '/dashboard/hosts', icon: UserCheck },
+    { label: 'Hosts', path: '/dashboard/hosts' },
     {
       label: 'Activities',
       path: '/dashboard/recent-activity',
@@ -61,7 +65,6 @@ export class Sidebar {
     },
     { label: 'Properties', path: '/dashboard/properties', icon: Building2 },
     { label: 'Bookings', path: '/dashboard/bookings', icon: CalendarCheck },
-    { label: 'Profile', path: '/dashboard/profile', icon: User },
     { label: 'Settings', path: '/dashboard/settings', icon: Settings },
   ];
 
@@ -73,5 +76,13 @@ export class Sidebar {
 
   onToggle(): void {
     this.toggle.emit();
+  }
+
+  toggleMobile(): void {
+    this.mobileOpen.update((v) => !v);
+  }
+
+  closeMobile(): void {
+    this.mobileOpen.set(false);
   }
 }

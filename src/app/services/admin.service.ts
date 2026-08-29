@@ -75,20 +75,6 @@ export class AdminService {
       .pipe(map((res) => res.data));
   }
 
-  // getActivities(
-  //   timeframe: '24h' | '7d' | '30d' = '7d',
-  //   limit = 10,
-  //   page = 1,
-  // ): Observable<ActivityResponse> {
-  //   const params = new HttpParams()
-  //     .set('timeframe', timeframe)
-  //     .set('limit', limit)
-  //     .set('page', page);
-  //   return this.http.get<ActivityResponse>(`${this.baseUrl}/activities`, {
-  //     params,
-  //   });
-  // }
-
   deleteUser(userId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/users/${userId}`);
   }

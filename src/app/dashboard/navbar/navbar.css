@@ -9,7 +9,11 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .navbar-left {
@@ -24,6 +28,57 @@
   font-weight: 600;
   color: #fafafa;
   letter-spacing: -0.01em;
+}
+
+@media (max-width: 786px) {
+  .navbar {
+    justify-content: center;
+    padding: 0 1rem 0 3.5rem; /* left padding clears the fixed hamburger button */
+    position: relative;
+  }
+
+  .navbar-left {
+    flex: 1;
+    justify-content: center;
+    align-items: center; /* overrides the earlier flex-end rule you had */
+  }
+
+  .page-title {
+    text-align: center;
+  }
+
+  .navbar-right {
+    position: absolute;
+    right: 1rem;
+  }
+
+  .email {
+    display: none;
+  }
+}
+
+@media (max-width: 554px) {
+  .navbar {
+    justify-content: flex-start;
+    padding: 0 1rem 0 3.25rem;
+  }
+
+  .navbar-left {
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .page-title {
+    text-align: left;
+    font-size: 1rem;
+    margin-left: 1.5rem;
+  }
+
+  .navbar-right {
+    position: static;
+    margin-left: auto;
+  }
 }
 
 .navbar-right {
@@ -79,7 +134,10 @@
   font-weight: 500;
   color: #fafafa;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .btn-logout:hover:not(:disabled) {
@@ -90,12 +148,6 @@
 .btn-logout:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-@media (max-width: 640px) {
-  .email {
-    display: none;
-  }
 }
 
 .loading-icon {

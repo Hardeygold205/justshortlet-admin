@@ -1,22 +1,38 @@
-export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'GUEST' | 'HOST';
-export type UserStatus = 'ACTIVE' | 'SUSPENDED' | 'DISABLED';
+export type UserRole = 'GUEST' | 'HOST' | 'ADMIN' | 'SUPER_ADMIN';
+export type UserStatus = 'ACTIVE' | 'DISABLED' | 'SUSPENDED';
+
+export interface UserProfile {
+  username: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  dob: string | null;
+  bio: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  idVerified: boolean;
+  addressVerified: boolean;
+  avatarUrl: string | null;
+  thumbnailUrl: string | null;
+  bannerUrl: string | null;
+  bannerThumbnailUrl: string | null;
+}
 
 export interface User {
   id: string;
-  email: string;
-  phone: string;
+  email: string | null;
+  phone: string | null;
+  emailVerified: boolean;
+  phoneVerified: boolean;
+  provider: string;
   role: UserRole;
-  status?: UserStatus;
-  firstName?: string;
-  lastName?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  profile?: {
-    avatarUrl: string;
-    firstName?: string;
-    lastName?: string;
-    username?: string
-  };
+  status: UserStatus;
+  isActive: boolean;
+  lastLoginAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  profile?: UserProfile;
 }
 
 export interface LoginRequest {
