@@ -165,6 +165,83 @@
         <span class="stat-label">Total Accounts</span>
       </div>
     </div>
+
+    <a routerLink="/dashboard/properties" class="stat-card clickable">
+      <div class="stat-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().totalProperties }}</span>
+        <span class="stat-label">Total Properties</span>
+      </div>
+    </a>
+
+    <a
+      routerLink="/dashboard/properties"
+      [queryParams]="{ status: 'PENDING_REVIEW' }"
+      class="stat-card clickable"
+    >
+      <div class="stat-icon text-amber-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().pendingReviewProperties }}</span>
+        <span class="stat-label">Pending Review</span>
+      </div>
+    </a>
+
+    <a
+      routerLink="/dashboard/properties"
+      [queryParams]="{ status: 'PUBLISHED' }"
+      class="stat-card clickable"
+    >
+      <div class="stat-icon text-emerald-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
+      <div class="stat-body">
+        <span class="stat-value">{{ stats().publishedProperties }}</span>
+        <span class="stat-label">Published</span>
+      </div>
+    </a>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
@@ -194,7 +271,9 @@
 
         <div class="flex flex-col gap-2.5 w-full sm:w-auto">
           @for (segment of roleDistribution(); track segment.label) {
-          <div class="flex sm:flex-row md:flex-col lg:flex-row items-center gap-1 lg:gap-2 text-[0.82rem]">
+          <div
+            class="flex sm:flex-row md:flex-col lg:flex-row items-center gap-1 lg:gap-2 text-[0.82rem]"
+          >
             <div class="flex flex-row gap-1 items-center">
               <span
                 class="w-2.25 h-2.25 rounded-full shrink-0"

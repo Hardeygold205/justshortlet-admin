@@ -75,6 +75,18 @@ export const routes: Routes = [
           import('./dashboard/properties/properties').then((m) => m.Properties),
       },
       {
+        path: 'properties/property-info/:propertyId',
+        loadComponent: () =>
+          import('./dashboard/properties/property-info/property-info').then(
+            (m) => m.PropertyInfo,
+          ),
+      },
+      {
+        path: 'amenities',
+        loadComponent: () =>
+          import('./dashboard/amenities/amenities').then((m) => m.Amenities),
+      },
+      {
         path: 'recent-activity',
         loadComponent: () =>
           import('./dashboard/recent-activity/recent-activity').then(

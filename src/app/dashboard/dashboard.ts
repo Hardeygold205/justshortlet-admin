@@ -25,6 +25,7 @@ export class Dashboard {
     '/dashboard/settings': 'Settings',
     '/dashboard/bookings': 'Bookings',
     '/dashboard/properties': 'Properties',
+    '/dashboard/properties/property-info': 'Property Details',
   };
 
   constructor(private router: Router) {

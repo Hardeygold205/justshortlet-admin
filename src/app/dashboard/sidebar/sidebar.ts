@@ -18,6 +18,7 @@ import {
   UserRound,
   Menu,
   X,
+  Sparkle,
 } from 'lucide-angular';
 
 interface NavItem {
@@ -64,6 +65,7 @@ export class Sidebar {
       icon: ActivityIcon,
     },
     { label: 'Properties', path: '/dashboard/properties', icon: Building2 },
+    { label: 'Amenities', path: '/dashboard/amenities', icon: Sparkle },
     { label: 'Bookings', path: '/dashboard/bookings', icon: CalendarCheck },
     { label: 'Settings', path: '/dashboard/settings', icon: Settings },
   ];

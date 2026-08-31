@@ -1,0 +1,162 @@
+<div class="p-6 max-w-7xl mx-auto">
+  <div
+    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
+  >
+    <div>
+      <h1 class="text-2xl font-bold text-neutral-100">Amenities Management</h1>
+      <p class="text-sm text-neutral-400">
+        Create, edit, and organize property options available to hosts.
+      </p>
+    </div>
+    <button
+      (click)="openCreateModal()"
+      class="bg-white hover:bg-neutral-200 text-black font-semibold px-4 py-2 rounded-lg text-xs transition"
+    >
+      + Add Amenity
+    </button>
+  </div>
+
+  @if (isLoading()) {
+  <div class="flex justify-center items-center py-16">
+    <div
+      class="w-8 h-8 border-2 border-neutral-600 border-t-white rounded-full animate-spin"
+    ></div>
+  </div>
+  } @else if (amenities().length === 0) {
+  <div
+    class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-12 text-center text-neutral-500"
+  >
+    No amenities configured yet.
+  </div>
+  } @else {
+  <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl overflow-hidden">
+    <table class="w-full text-left text-xs text-neutral-300">
+      <thead
+        class="bg-[#121212] text-neutral-400 uppercase tracking-wider border-b border-[#1a1a1a]"
+      >
+        <tr>
+          <th class="p-4">Name</th>
+          <th class="p-4">Slug</th>
+          <th class="p-4">Category</th>
+          <th class="p-4">Icon Reference</th>
+          <th class="p-4 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#1a1a1a]">
+        @for (amenity of amenities(); track amenity.id) {
+        <tr class="hover:bg-[#121212] transition">
+          <td class="p-4 font-semibold text-neutral-100">{{ amenity.name }}</td>
+          <td class="p-4 font-mono text-neutral-400">{{ amenity.slug }}</td>
+          <td class="p-4">
+            <span
+              class="px-2.5 py-1 bg-[#1a1a1a] border border-[#262626] rounded text-[10px] text-neutral-300"
+            >
+              {{ amenity.category }}
+            </span>
+          </td>
+          <td class="p-4 font-mono text-neutral-400">{{ amenity.icon }}</td>
+          <td class="p-4 text-right space-x-2">
+            <button
+              (click)="openEditModal(amenity)"
+              class="px-2.5 py-1.5 bg-[#1a1a1a] hover:bg-[#262626] text-neutral-300 rounded text-xs transition"
+            >
+              Edit
+            </button>
+            <button
+              (click)="deleteAmenity(amenity)"
+              class="px-2.5 py-1.5 bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800/50 rounded text-xs transition"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
+
+<!-- Modal Form -->
+@if (isModalOpen()) {
+<div
+  class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+>
+  <div
+    class="bg-[#0a0a0a] border border-[#262626] rounded-xl max-w-md w-full p-6 text-neutral-200"
+  >
+    <h3 class="text-lg font-bold mb-4">
+      {{ isEditing() ? 'Edit Amenity' : 'Add New Amenity' }}
+    </h3>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-neutral-400 mb-1"
+          >Amenity Name *</label
+        >
+        <input
+          type="text"
+          [(ngModel)]="formData().name"
+          (ngModelChange)="onNameChange()"
+          placeholder="e.g., Air Conditioning"
+          class="w-full bg-[#121212] border border-[#262626] rounded-lg p-2.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-neutral-400 mb-1"
+          >Slug *</label
+        >
+        <input
+          type="text"
+          [(ngModel)]="formData().slug"
+          placeholder="e.g., ac"
+          class="w-full bg-[#121212] border border-[#262626] rounded-lg p-2.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-500"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-neutral-400 mb-1"
+          >Category *</label
+        >
+        <select
+          [(ngModel)]="formData().category"
+          class="w-full bg-[#121212] border border-[#262626] rounded-lg p-2.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-500"
+        >
+          @for (cat of categories; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-neutral-400 mb-1"
+          >Icon Identifier *</label
+        >
+        <input
+          type="text"
+          [(ngModel)]="formData().icon"
+          placeholder="e.g., wind, wifi, tv"
+          class="w-full bg-[#121212] border border-[#262626] rounded-lg p-2.5 text-xs text-neutral-200 focus:outline-none focus:border-neutral-500"
+        />
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-6">
+      <button
+        (click)="closeModal()"
+        class="px-4 py-2 bg-[#1a1a1a] rounded-lg text-xs"
+      >
+        Cancel
+      </button>
+      <button
+        [disabled]="isSaving()"
+        (click)="saveAmenity()"
+        class="px-4 py-2 bg-white text-black font-semibold rounded-lg text-xs"
+      >
+        {{ isSaving() ? 'Saving...' : 'Save Amenity' }}
+      </button>
+    </div>
+  </div>
+</div>
+}

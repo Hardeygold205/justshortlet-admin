@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { AdminService } from '../../services/admin.service';
 import { ActivityService } from '../../services/activity.service';
 import { UserService } from '../../services/users.service';
+import { PropertyService } from '../../services/property.service';
 import { User } from '../../models/user.model';
 import { Activity } from '../../models/activity.model';
 
@@ -20,11 +21,12 @@ export class Overview implements OnInit {
   private adminService = inject(AdminService);
   private userService = inject(UserService);
   private activityService = inject(ActivityService);
+  private propertyService = inject(PropertyService);
 
   isLoading = signal<boolean>(true);
   recentActivities = signal<Activity[]>([]);
   recentAdmins = signal<User[]>([]);
-  users = signal<User[]>([]); // raw list, backing both stats and charts
+  users = signal<User[]>([]);
 
   stats = signal({
     totalGuests: 0,
@@ -33,9 +35,11 @@ export class Overview implements OnInit {
     totalAdmins: 0,
     activeAccounts: 0,
     suspended: 0,
+    totalProperties: 0,
+    pendingReviewProperties: 0,
+    publishedProperties: 0,
   });
 
-  // ── Role distribution donut ──────────────────────────────
   roleDistribution = computed(() => {
     const all = this.users();
     const guests = all.filter((u) => u.role === 'GUEST').length;
@@ -68,7 +72,6 @@ export class Overview implements OnInit {
     return `conic-gradient(${parts.join(', ')})`;
   });
 
-  // ── Signup trend, last 7 days ─────────────────────────────
   signupTrend = computed(() => {
     const all = this.users();
     const days: { label: string; count: number }[] = [];
@@ -98,7 +101,7 @@ export class Overview implements OnInit {
   loadOverviewData(): void {
     this.isLoading.set(true);
 
-    this.userService.getAllUsers({ limit:100 }).subscribe({
+    this.userService.getAllUsers({ limit: 100 }).subscribe({
       next: (res) => {
         const all = res.users;
         this.users.set(all);
@@ -135,6 +138,27 @@ export class Overview implements OnInit {
     this.activityService.getAllActivities({ limit: 10, page: 1 }).subscribe({
       next: ({ activities }) => this.recentActivities.set(activities),
       error: () => this.recentActivities.set([]),
+    });
+
+    this.propertyService.getAdminProperties({ limit:50 }).subscribe({
+      next: (res) => {
+        const properties = res.data.properties;
+        const totalProps = res.data.pagination.total;
+        const pendingCount = properties.filter(
+          (p) => p.status === 'PENDING_REVIEW',
+        ).length;
+        const publishedCount = properties.filter(
+          (p) => p.status === 'PUBLISHED',
+        ).length;
+
+        this.stats.update((s) => ({
+          ...s,
+          totalProperties: totalProps,
+          pendingReviewProperties: pendingCount,
+          publishedProperties: publishedCount,
+        }));
+      },
+      error: (err) => console.error('Failed to load property stats', err),
     });
 
     if (this.authService.isSuperAdmin()) {
