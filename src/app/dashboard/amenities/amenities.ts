@@ -17,13 +17,11 @@ export class Amenities implements OnInit {
   isLoading = signal<boolean>(true);
   amenities = signal<Amenity[]>([]);
 
-  // Modal State
   isModalOpen = signal<boolean>(false);
   isEditing = signal<boolean>(false);
   editingId = signal<string | null>(null);
   isSaving = signal<boolean>(false);
 
-  // Form State
   formData = signal<CreateAmenityDto>({
     name: '',
     slug: '',

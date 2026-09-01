@@ -152,7 +152,6 @@ export class Properties implements OnInit {
     this.router.navigate([], { queryParams, relativeTo: this.route });
   }
 
-  // Open status modal
   openStatusModal(property: Property): void {
     this.selectedPropertyForStatus.set(property);
     this.newStatus.set(

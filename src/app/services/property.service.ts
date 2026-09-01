@@ -1,4 +1,4 @@
-import { Injectable, inject, } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../environments/environment';
@@ -37,10 +37,25 @@ export class PropertyService {
     return this.http.get<AdminPropertiesResponse>(this.apiUrl, { params });
   }
 
+  // getPropertyById(id: string): Observable<Property> {
+  //   return this.http
+  //     .get<ApiEnvelope<Property>>(`${this.publicApiUrl}/${id}`)
+  //     .pipe(map((res) => res.data));
+  // }
+
   getPropertyById(id: string): Observable<Property> {
-    return this.http
-      .get<ApiEnvelope<Property>>(`${this.publicApiUrl}/${id}`)
-      .pipe(map((res) => res.data));
+    return this.getAdminProperties({ limit: 50 }).pipe(
+      map((res) => {
+        const properties = res.data?.properties || [];
+        const found = properties.find((p) => p.id === id);
+
+        if (!found) {
+          throw new Error('Property not found');
+        }
+
+        return found;
+      }),
+    );
   }
 
   updatePropertyStatus(
