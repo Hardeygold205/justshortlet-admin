@@ -1,8 +1,10 @@
-<div class="page-container">
+<div
+  class="page-container p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto"
+>
   <div class="page-header">
     <h1>Recent Activities</h1>
     <p>
-      Full activity log across the platform — account changes, bookings, and
+      Full activity log across the platform, account changes, bookings, and
       system events.
     </p>
   </div>
@@ -15,45 +17,51 @@
     <button class="btn-secondary" (click)="loadActivities()">Retry</button>
   </div>
   } @else {
-  <div class="card">
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Category</th>
-            <th>Actor</th>
-            <th>When</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (activity of activities(); track activity.id) {
-          <tr>
-            <td>{{ activity.description }}</td>
-            <td><span class="badge">{{ activity.type }}</span></td>
-            <td>
-              <span
-                class="status-pill"
-                [class.active]="activity.category === 'AUTH'"
-              >
-                {{ activity.category }}
-              </span>
-            </td>
-            <td>
-              {{ activity.actorEmail || activity.metadata?.['phone'] ||
-              activity.actorId || '—' }}
-            </td>
-            <td>{{ activity.createdAt | date:'medium' }}</td>
-          </tr>
-          } @empty {
-          <tr>
-            <td colspan="5" class="empty">No activities found</td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+  <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl overflow-x-auto">
+    <table class="w-full text-left text-xs text-neutral-300">
+      <thead
+        class="bg-[#121212] text-neutral-400 uppercase tracking-wider border-b border-[#1a1a1a]"
+      >
+        <tr>
+          <th class="p-4">Description</th>
+          <th class="p-4">Type</th>
+          <th class="p-4">Category</th>
+          <th class="p-4">Actor</th>
+          <th class="p-4">When</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-[#1a1a1a]">
+        @for (activity of activities(); track activity.id) {
+        <tr class="hover:bg-[#121212] transition">
+          <td class="p-4 max-w-sm min-w-75 align-top">
+            <p class="line-clamp-2 wrap-break-word">
+              {{ activity.description }}
+            </p>
+          </td>
+          <td class="p-4"><span class="badge">{{ activity.type }}</span></td>
+          <td class="p-4">
+            <span
+              class="status-pill"
+              [class.active]="activity.category === 'AUTH'"
+            >
+              {{ activity.category }}
+            </span>
+          </td>
+          <td class="flex-nowrap text-nowrap p-4">
+            {{ activity.actorEmail || activity.metadata?.['phone'] ||
+            activity.actorId || '—' }}
+          </td>
+          <td class="flex-nowrap text-nowrap p-4">
+            {{ activity.createdAt | date:'medium' }}
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5" class="empty">No activities found</td>
+        </tr>
+        }
+      </tbody>
+    </table>
   </div>
 
   @if (pagination()) {

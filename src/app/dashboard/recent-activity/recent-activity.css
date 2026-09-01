@@ -1,6 +1,4 @@
 .page-container {
-  padding: 2rem;
-  max-width: 1440px;
   color: #fafafa;
   font-family:
     "Inter",
@@ -33,39 +31,6 @@
   border-radius: 12px;
   overflow: hidden;
   width: 100%;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
-  min-width: 700px;
-}
-
-.table th {
-  text-align: left;
-  padding: 0.75rem 1.25rem;
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #737373;
-  background: #000000;
-  border-bottom: 1px solid #1a1a1a;
-  white-space: nowrap;
-}
-
-.table td {
-  padding: 0.85rem 1.25rem;
-  border-bottom: 1px solid #141414;
-  color: #a3a3a3;
-  vertical-align: middle;
 }
 
 .badge {

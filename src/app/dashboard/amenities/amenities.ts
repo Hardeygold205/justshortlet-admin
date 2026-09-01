@@ -17,6 +17,11 @@ export class Amenities implements OnInit {
   isLoading = signal<boolean>(true);
   amenities = signal<Amenity[]>([]);
 
+  showDeleteModal = signal<boolean>(false);
+  amenityToDelete = signal<Amenity | null>(null);
+  actionLoading = signal<boolean>(false);
+  actionError = signal<string | null>(null);
+
   isModalOpen = signal<boolean>(false);
   isEditing = signal<boolean>(false);
   editingId = signal<string | null>(null);
@@ -50,6 +55,40 @@ export class Amenities implements OnInit {
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false),
+    });
+  }
+
+  openDeleteModal(amenity: Amenity): void {
+    this.amenityToDelete.set(amenity);
+    this.actionError.set(null);
+    this.showDeleteModal.set(true);
+  }
+
+  closeModals(): void {
+    this.showDeleteModal.set(false);
+    this.amenityToDelete.set(null);
+    this.actionError.set(null);
+  }
+
+  confirmDelete(): void {
+    const amenity = this.amenityToDelete();
+    if (!amenity) return;
+
+    this.actionLoading.set(true);
+    this.actionError.set(null);
+
+    this.amenityService.deleteAmenity(amenity.id).subscribe({
+      next: () => {
+        this.actionLoading.set(false);
+        this.closeModals();
+        this.fetchAmenities();
+      },
+      error: (err) => {
+        this.actionLoading.set(false);
+        this.actionError.set(
+          err?.error?.message || 'Failed to delete amenity. Please try again.',
+        );
+      },
     });
   }
 
@@ -118,16 +157,6 @@ export class Amenities implements OnInit {
           this.isSaving.set(false);
           alert(err?.error?.message || 'Failed to create amenity');
         },
-      });
-    }
-  }
-
-  deleteAmenity(amenity: Amenity): void {
-    if (confirm(`Are you sure you want to delete "${amenity.name}"?`)) {
-      this.amenityService.deleteAmenity(amenity.id).subscribe({
-        next: () => this.fetchAmenities(),
-        error: (err) =>
-          alert(err?.error?.message || 'Failed to delete amenity'),
       });
     }
   }

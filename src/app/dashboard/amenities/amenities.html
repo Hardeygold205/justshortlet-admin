@@ -1,4 +1,4 @@
-<div class="p-6 max-w-7xl mx-auto">
+<div class="p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto">
   <div
     class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
   >
@@ -10,7 +10,7 @@
     </div>
     <button
       (click)="openCreateModal()"
-      class="bg-white hover:bg-neutral-200 text-black font-semibold px-4 py-2 rounded-lg text-xs transition"
+      class="bg-white hover:bg-neutral-200 text-black font-semibold px-4 py-3 cursor-pointer rounded-lg text-xs transition"
     >
       + Add Amenity
     </button>
@@ -29,7 +29,7 @@
     No amenities configured yet.
   </div>
   } @else {
-  <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl overflow-hidden">
+  <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl overflow-x-auto">
     <table class="w-full text-left text-xs text-neutral-300">
       <thead
         class="bg-[#121212] text-neutral-400 uppercase tracking-wider border-b border-[#1a1a1a]"
@@ -38,7 +38,7 @@
           <th class="p-4">Name</th>
           <th class="p-4">Slug</th>
           <th class="p-4">Category</th>
-          <th class="p-4">Icon Reference</th>
+          <th class="p-4 text-nowrap">Icon Reference</th>
           <th class="p-4 text-right">Actions</th>
         </tr>
       </thead>
@@ -55,7 +55,9 @@
             </span>
           </td>
           <td class="p-4 font-mono text-neutral-400">{{ amenity.icon }}</td>
-          <td class="p-4 text-right space-x-2">
+          <td
+            class="p-4 flex flex-row items-center justify-end gap-2 flex-nowrap text-nowrap"
+          >
             <button
               (click)="openEditModal(amenity)"
               class="px-2.5 py-1.5 bg-[#1a1a1a] hover:bg-[#262626] text-neutral-300 rounded text-xs transition"
@@ -63,7 +65,7 @@
               Edit
             </button>
             <button
-              (click)="deleteAmenity(amenity)"
+              (click)="openDeleteModal(amenity)"
               class="px-2.5 py-1.5 bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800/50 rounded text-xs transition"
             >
               Delete
@@ -77,8 +79,40 @@
   }
 </div>
 
-<!-- Modal Form -->
-@if (isModalOpen()) {
+@if (showDeleteModal()) {
+<div class="modal-backdrop" (click)="closeModals()">
+  <div class="modal modal-sm" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Confirm Deletion</h2>
+      <button class="btn-close" (click)="closeModals()">×</button>
+    </div>
+    <div class="modal-body">
+      <p>
+        Are you sure you want to delete amenity
+        <strong>{{ amenityToDelete()?.name }}</strong>?
+      </p>
+      <p class="text-warning">This action is permanent and cannot be undone.</p>
+      @if (actionError()) {
+      <div class="form-error">{{ actionError() }}</div>
+      }
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-secondary" (click)="closeModals()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn-danger"
+        [disabled]="actionLoading()"
+        (click)="confirmDelete()"
+      >
+        {{ actionLoading() ? 'Deleting...' : 'Delete Amenity' }}
+      </button>
+    </div>
+  </div>
+</div>
+} @if (isModalOpen()) {
 <div
   class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
 >

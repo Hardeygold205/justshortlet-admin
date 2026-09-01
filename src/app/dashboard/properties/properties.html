@@ -1,4 +1,4 @@
-<div class="p-6 max-w-7xl mx-auto">
+<div class="p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto">
   <div
     class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
   >
@@ -110,7 +110,7 @@
           <th class="p-4">Host</th>
           <th class="p-4">Location</th>
           <th class="p-4">Type</th>
-          <th class="p-4">Price / Night</th>
+          <th class="p-4 text-nowrap">Price / Night</th>
           <th class="p-4">Status</th>
           <th class="p-4 text-right">Actions</th>
         </tr>
@@ -140,7 +140,9 @@
             </div>
           </td>
 
-          <td class="p-4">{{ property.city }}, {{ property.state }}</td>
+          <td class="p-4 text-nowrap">
+            {{ property.city }}, {{ property.state }}
+          </td>
 
           <td class="p-4">
             <span
@@ -156,12 +158,12 @@
 
           <td class="p-4">
             <span
-              class="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide uppercase inline-flex items-center gap-1.5"
+              class="py-1 text-[10px] font-semibold tracking-wide uppercase inline-flex items-center gap-1.5"
               [ngClass]="{
-                    'bg-emerald-950/80 text-emerald-400 border border-emerald-800/50': property.status === 'PUBLISHED',
-                    'bg-amber-950/80 text-amber-400 border border-amber-800/50': property.status === 'PENDING_REVIEW',
-                    'bg-rose-950/80 text-rose-400 border border-rose-800/50': property.status === 'REJECTED' || property.status === 'SUSPENDED',
-                    'bg-neutral-800 text-neutral-400': property.status === 'DRAFT' || property.status === 'ARCHIVED'
+                    ' text-emerald-400 border border-emerald-800/50': property.status === 'PUBLISHED',
+                    ' text-amber-400 border border-amber-800/50': property.status === 'PENDING_REVIEW',
+                    ' text-rose-400 border border-rose-800/50': property.status === 'REJECTED' || property.status === 'SUSPENDED',
+                    ' text-neutral-400': property.status === 'DRAFT' || property.status === 'ARCHIVED'
                   }"
             >
               <span
@@ -177,7 +179,9 @@
             </span>
           </td>
 
-          <td class="p-4 text-right space-x-2">
+          <td
+            class="p-4 flex flex-row items-center justify-end gap-2 flex-nowrap text-nowrap"
+          >
             <a
               [routerLink]="['/dashboard/properties/property-info', property.id]"
               [class.opacity-40]="property.status === 'DRAFT'"

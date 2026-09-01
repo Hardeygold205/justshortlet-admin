@@ -1,4 +1,4 @@
-<div class="admins-page">
+<div class="admins-page p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto">
   <div class="page-header">
     <div>
       <h1>Admins</h1>
@@ -39,7 +39,7 @@
             <th>Email</th>
             <th>Role</th>
             <th>Status</th>
-            <th>Created At</th>
+            <th class="text-nowrap">Created At</th>
             <th class="text-right">Actions</th>
           </tr>
         </thead>
@@ -63,7 +63,9 @@
                 {{ admin.status }}
               </span>
             </td>
-            <td class="text-muted">{{ admin.createdAt | date:'short' }}</td>
+            <td class="text-muted text-nowrap">
+              {{ admin.createdAt | date:'short' }}
+            </td>
             <td class="actions">
               <button class="btn-icon" title="Edit" (click)="openEdit(admin)">
                 <svg
@@ -116,7 +118,6 @@
   }
 </div>
 
-<!-- Create Modal -->
 @if (showCreateModal()) {
 <div class="modal-backdrop" (click)="closeModals()">
   <div class="modal" (click)="$event.stopPropagation()">
@@ -174,7 +175,6 @@
 </div>
 }
 
-<!-- Edit Modal -->
 @if (showEditModal()) {
 <div class="modal-backdrop" (click)="closeModals()">
   <div class="modal" (click)="$event.stopPropagation()">
@@ -223,7 +223,6 @@
 </div>
 }
 
-<!-- Custom Delete Modal -->
 @if (showDeleteModal()) {
 <div class="modal-backdrop" (click)="closeModals()">
   <div class="modal modal-sm" (click)="$event.stopPropagation()">

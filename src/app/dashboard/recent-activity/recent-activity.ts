@@ -18,7 +18,7 @@ export class RecentActivity implements OnInit {
   isLoading = signal(true);
   error = signal<string | null>(null);
   currentPage = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize = 40;
 
   ngOnInit(): void {
     this.loadActivities();

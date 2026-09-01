@@ -1,6 +1,4 @@
 .page-container {
-  padding: 2rem;
-  max-width: 1440px;
   color: #fafafa;
   font-family:
     "Inter",
@@ -163,9 +161,9 @@
   gap: 0.4rem;
 }
 
-.text-right {
+/* .text-right {
   text-align: right;
-}
+} */
 
 .btn-secondary {
   padding: 0.6rem 1rem;
@@ -268,11 +266,11 @@
   color: #f87171;
 }
 
-.empty {
+/* .empty {
   text-align: center;
   color: #525252;
   padding: 2.5rem !important;
-}
+} */
 
 .spinner {
   width: 28px;

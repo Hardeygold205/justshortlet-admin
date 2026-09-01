@@ -37,26 +37,26 @@ export class PropertyService {
     return this.http.get<AdminPropertiesResponse>(this.apiUrl, { params });
   }
 
-  // getPropertyById(id: string): Observable<Property> {
-  //   return this.http
-  //     .get<ApiEnvelope<Property>>(`${this.publicApiUrl}/${id}`)
-  //     .pipe(map((res) => res.data));
-  // }
-
   getPropertyById(id: string): Observable<Property> {
-    return this.getAdminProperties({ limit: 50 }).pipe(
-      map((res) => {
-        const properties = res.data?.properties || [];
-        const found = properties.find((p) => p.id === id);
-
-        if (!found) {
-          throw new Error('Property not found');
-        }
-
-        return found;
-      }),
-    );
+    return this.http
+      .get<ApiEnvelope<Property>>(`${this.apiUrl}/${id}`) // this.apiUrl is already /admin/properties
+      .pipe(map((res) => res.data));
   }
+
+  // getPropertyById(id: string): Observable<Property> {
+  //   return this.getAdminProperties({ limit: 50 }).pipe(
+  //     map((res) => {
+  //       const properties = res.data?.properties || [];
+  //       const found = properties.find((p) => p.id === id);
+
+  //       if (!found) {
+  //         throw new Error('Property not found');
+  //       }
+
+  //       return found;
+  //     }),
+  //   );
+  // }
 
   updatePropertyStatus(
     id: string,

@@ -1,0 +1,120 @@
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-sm {
+  max-width: 400px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fafafa;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #525252;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-close:hover {
+  color: #fafafa;
+}
+
+form,
+.modal-body {
+  padding: 1.25rem;
+}
+
+.modal-body p {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #a3a3a3;
+}
+
+.modal-body .text-warning {
+  color: #737373;
+  font-size: 0.8rem;
+}
+
+.btn-secondary {
+  padding: 0.6rem 1rem;
+  background: #0a0a0a;
+  border: 1px solid #262626;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fafafa;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-secondary:hover {
+  background: #1a1a1a;
+}
+
+.btn-danger {
+  padding: 0.6rem 1rem;
+  background: #2a0808;
+  border: 1px solid #450a0a;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f87171;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #3f0e0e;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #1a1a1a;
+}
+
+.form-error {
+  margin-top: 1rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
