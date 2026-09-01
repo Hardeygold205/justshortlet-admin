@@ -6,8 +6,10 @@ import { AdminService } from '../../services/admin.service';
 import { ActivityService } from '../../services/activity.service';
 import { UserService } from '../../services/users.service';
 import { PropertyService } from '../../services/property.service';
+import { BookingService } from '../../services/booking.service';
 import { User } from '../../models/user.model';
 import { Activity } from '../../models/activity.model';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-overview',
@@ -22,17 +24,20 @@ export class Overview implements OnInit {
   private userService = inject(UserService);
   private activityService = inject(ActivityService);
   private propertyService = inject(PropertyService);
+  private bookingService = inject(BookingService);
 
   isLoading = signal<boolean>(true);
   recentActivities = signal<Activity[]>([]);
   recentAdmins = signal<User[]>([]);
   users = signal<User[]>([]);
+  bookings = signal<Booking[]>([]);
 
   stats = signal({
     totalGuests: 0,
     totalHosts: 0,
     allAccounts: 0,
     totalAdmins: 0,
+    totalBookings: 0,
     activeAccounts: 0,
     suspended: 0,
     totalProperties: 0,
@@ -96,6 +101,27 @@ export class Overview implements OnInit {
 
   ngOnInit(): void {
     this.loadOverviewData();
+    this.fetchBookingsCount();
+  }
+
+  fetchBookingsCount(): void {
+    this.bookingService.getAdminBookings({ limit: 50, page: 1 }).subscribe({
+      next: (res) => {
+        const totalCount = res.data.pagination.total;
+
+        this.stats.update((s) => ({
+          ...s,
+          totalBookings: totalCount,
+        }));
+
+        this.bookings.set(res.data.bookings);
+      },
+      error: (err) => {
+        console.error('Failed to load total bookings', err);
+        this.bookings.set([]);
+        this.stats.update((s) => ({ ...s, totalBookings: 0 }));
+      },
+    });
   }
 
   loadOverviewData(): void {
@@ -140,7 +166,7 @@ export class Overview implements OnInit {
       error: () => this.recentActivities.set([]),
     });
 
-    this.propertyService.getAdminProperties({ limit:50 }).subscribe({
+    this.propertyService.getAdminProperties({ limit: 50 }).subscribe({
       next: (res) => {
         const properties = res.data.properties;
         const totalProps = res.data.pagination.total;

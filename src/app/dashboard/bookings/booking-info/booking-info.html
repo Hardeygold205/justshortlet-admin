@@ -1,0 +1,225 @@
+<div
+  class="page-container p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto space-y-6"
+>
+  <div class="page-header">
+    <button class="back-link" (click)="goBack()">← Go Back</button>
+  </div>
+
+  @if (isLoading()) {
+  <div class="p-12 text-center text-xs text-neutral-500">
+    Loading booking information...
+  </div>
+  } @else if (!booking()) {
+  <div class="p-12 text-center text-xs text-rose-400">
+    Booking not found or failed to load.
+  </div>
+  } @else { @let b = booking()!;
+
+  <div
+    class="p-6 bg-[#121212] border border-[#262626] rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6"
+  >
+    <div class="space-y-1">
+      <div class="flex items-center gap-3">
+        <h1 class="text-lg font-semibold text-white">Booking #{{ b.id }}</h1>
+        <span
+          class="px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border"
+          [ngClass]="getStatusClass(b.status)"
+        >
+          {{ b.status }}
+        </span>
+      </div>
+      <p class="text-xs text-neutral-400">
+        Created on {{ b.createdAt | date: 'medium' }}
+      </p>
+    </div>
+
+    <div class="text-left md:text-right">
+      <div class="text-xs text-neutral-400">Total Price</div>
+      <div class="text-xl font-bold text-white">
+        {{ b.total | currency: 'NGN' : 'symbol-narrow' : '1.0-0' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+      <div
+        class="p-6 bg-[#121212] border border-[#262626] rounded-xl space-y-4"
+      >
+        <h2 class="text-sm font-semibold text-neutral-300">Property Details</h2>
+        <div class="flex gap-4">
+          <img
+            [src]="b.property?.images?.[0]?.upload?.url || 'assets/placeholder.jpg'"
+            alt="Property image"
+            class="w-24 h-24 rounded-lg object-cover bg-[#1a1a1a] border border-[#333]"
+          />
+          <div class="space-y-1">
+            <h3 class="text-base font-semibold text-white">
+              {{ b.property?.title }}
+            </h3>
+            <p class="text-xs text-neutral-400">
+              {{ b.property?.city }}, {{ b.property?.state }}
+            </p>
+            <div class="pt-2">
+              <a
+                [routerLink]="['/dashboard/properties/property-info', b.propertyId]"
+                class="bg-white hover:opacity-40 ease-in-out duration-300 text-black px-2 p-1 text-xs rounded-md"
+              >
+                View Property
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reservation Details Card -->
+      <div
+        class="p-6 bg-[#121212] border border-[#262626] rounded-xl space-y-4"
+      >
+        <h2 class="text-sm font-semibold text-neutral-300">Stay Information</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+          <div>
+            <span class="text-neutral-500 block">Check-In</span>
+            <span class="text-white font-medium"
+              >{{ b.checkIn | date: 'mediumDate' }}</span
+            >
+          </div>
+          <div>
+            <span class="text-neutral-500 block">Check-Out</span>
+            <span class="text-white font-medium"
+              >{{ b.checkOut | date: 'mediumDate' }}</span
+            >
+          </div>
+          <div>
+            <span class="text-neutral-500 block">Duration</span>
+            <span class="text-white font-medium">{{ b.nights }} Night(s)</span>
+          </div>
+          <div>
+            <span class="text-neutral-500 block">Guests</span>
+            <span class="text-white font-medium">{{ b.guests }} Guest(s)</span>
+          </div>
+        </div>
+
+        @if (b.guestNote) {
+        <div class="pt-3 border-t border-[#262626]">
+          <span class="text-xs text-neutral-500 block mb-1">Guest Note:</span>
+          <p
+            class="text-xs text-neutral-300 bg-[#181818] p-3 rounded-lg border border-[#262626]"
+          >
+            "{{ b.guestNote }}"
+          </p>
+        </div>
+        }
+      </div>
+
+      <!-- Payment Breakdown Card -->
+      <div
+        class="p-6 bg-[#121212] border border-[#262626] rounded-xl space-y-4"
+      >
+        <h2 class="text-sm font-semibold text-neutral-300">
+          Payment Breakdown
+        </h2>
+        <div class="space-y-2 text-xs divide-y divide-[#262626]">
+          <div class="flex justify-between pt-2">
+            <span class="text-neutral-400">
+              Nightly Rate ({{ b.pricePerNight | currency: 'NGN' :
+              'symbol-narrow' : '1.0-0' }} x {{ b.nights }} nights)
+            </span>
+            <span class="text-white"
+              >{{ b.subtotal | currency: 'NGN' : 'symbol-narrow' : '1.0-0'
+              }}</span
+            >
+          </div>
+          <div class="flex justify-between pt-2">
+            <span class="text-neutral-400">Cleaning Fee</span>
+            <span class="text-white"
+              >{{ b.cleaningFee | currency: 'NGN' : 'symbol-narrow' : '1.0-0'
+              }}</span
+            >
+          </div>
+          <div class="flex justify-between pt-2">
+            <span class="text-neutral-400"
+              >Platform Service Fee ({{ b.serviceFeePercent }}%)</span
+            >
+            <span class="text-white"
+              >{{ b.serviceFee | currency: 'NGN' : 'symbol-narrow' : '1.0-0'
+              }}</span
+            >
+          </div>
+          <div class="flex justify-between pt-3 font-semibold text-sm">
+            <span class="text-white">Total</span>
+            <span class="text-white"
+              >{{ b.total | currency: 'NGN' : 'symbol-narrow' : '1.0-0' }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: User Info & Timestamps -->
+    <div class="space-y-6">
+      <!-- Guest Details Card -->
+      <div
+        class="p-6 bg-[#121212] border border-[#262626] rounded-xl space-y-3 text-xs"
+      >
+        <h2 class="text-sm font-semibold text-neutral-300">
+          Guest Information
+        </h2>
+        <div>
+          <span class="text-neutral-500 block">Full Name</span>
+          <span class="text-white font-medium">
+            {{ b.user?.profile?.firstName }} {{ b.user?.profile?.lastName }}
+          </span>
+        </div>
+        <div>
+          <span class="text-neutral-500 block">Email Address</span>
+          <span class="text-white font-medium">{{ b.user?.email }}</span>
+        </div>
+        <div>
+          <span class="text-neutral-500 block">User ID</span>
+          <span class="text-neutral-400 font-mono text-[11px]"
+            >{{ b.userId }}</span
+          >
+        </div>
+      </div>
+
+      <!-- Audit Timeline Card -->
+      <div
+        class="p-6 bg-[#121212] border border-[#262626] rounded-xl space-y-3 text-xs"
+      >
+        <h2 class="text-sm font-semibold text-neutral-300">Audit Timeline</h2>
+        <div class="space-y-2">
+          <div>
+            <span class="text-neutral-500 block">Created At</span>
+            <span class="text-neutral-300"
+              >{{ b.createdAt | date: 'medium' }}</span
+            >
+          </div>
+          @if (b.confirmedAt) {
+          <div>
+            <span class="text-neutral-500 block">Confirmed At</span>
+            <span class="text-neutral-300"
+              >{{ b.confirmedAt | date: 'medium' }}</span
+            >
+          </div>
+          } @if (b.completedAt) {
+          <div>
+            <span class="text-neutral-500 block">Completed At</span>
+            <span class="text-neutral-300"
+              >{{ b.completedAt | date: 'medium' }}</span
+            >
+          </div>
+          } @if (b.cancelledAt) {
+          <div>
+            <span class="text-neutral-500 block">Cancelled At</span>
+            <span class="text-rose-400"
+              >{{ b.cancelledAt | date: 'medium' }}</span
+            >
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

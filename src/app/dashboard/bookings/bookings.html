@@ -1,1 +1,191 @@
-<p>bookings works!</p>
+<div
+  class="page-container p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto space-y-6"
+>
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+  >
+    <div>
+      <h1 class="text-xl font-semibold text-white">Platform Bookings</h1>
+      <p class="text-xs text-neutral-400 mt-1">
+        Manage and track guest reservations platform-wide
+      </p>
+    </div>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="p-4 bg-[#121212] border border-[#262626] rounded-xl space-y-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <!-- Status Filter -->
+      <div>
+        <label class="block text-xs font-medium text-neutral-400 mb-1"
+          >Booking Status</label
+        >
+        <select
+          [ngModel]="filters().status"
+          (ngModelChange)="updateStatusFilter($event); applyFilters()"
+          class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-neutral-500"
+        >
+          <option value="">All Statuses</option>
+          @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-neutral-400 mb-1"
+          >Property ID</label
+        >
+        <input
+          type="text"
+          [ngModel]="filters().propertyId"
+          (ngModelChange)="updatePropertyIdFilter($event)"
+          (keyup.enter)="applyFilters()"
+          placeholder="Filter by Property UUID..."
+          class="w-full bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-neutral-500 placeholder:text-neutral-600"
+        />
+      </div>
+
+      <div class="flex items-end gap-2 w-full">
+        <button
+          (click)="applyFilters()"
+          class="px-4 py-2 bg-neutral-200 w-full hover:bg-white text-black font-medium text-xs rounded-lg transition text-nowrap"
+        >
+          Apply Filters
+        </button>
+        <button
+          (click)="resetFilters()"
+          class="px-4 py-2 bg-[#1a1a1a] w-full hover:bg-[#262626] text-neutral-300 text-xs rounded-lg transition border border-[#333]"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Container -->
+  <div class="bg-[#121212] border border-[#262626] rounded-xl overflow-hidden">
+    @if (isLoading()) {
+    <div class="p-12 text-center text-xs text-neutral-500">
+      Loading platform bookings...
+    </div>
+    } @else if (bookings().length === 0) {
+    <div class="p-12 text-center text-xs text-neutral-500">
+      No bookings found matching your search query.
+    </div>
+    } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs">
+        <thead
+          class="bg-[#181818] border-b border-[#262626] text-neutral-400 uppercase tracking-wider font-semibold"
+        >
+          <tr>
+            <th class="p-4">Property</th>
+            <th class="p-4">Guest</th>
+            <th class="p-4 text-nowrap">Dates & Duration</th>
+            <th class="p-4 text-nowrap">Total Amount</th>
+            <th class="p-4">Status</th>
+            <th class="p-4 text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#262626] text-neutral-300">
+          @for (booking of bookings(); track booking.id) {
+          <tr class="hover:bg-[#161616] transition">
+            <td class="p-4 flex-nowrap text-nowrap min-w-65">
+              <div class="flex items-center gap-3">
+                <img
+                  [src]="booking.property?.images?.[0]?.upload?.url || 'assets/placeholder.jpg'"
+                  alt="Property thumbnail"
+                  class="w-10 h-10 rounded-lg object-cover bg-[#1a1a1a] border border-[#333]"
+                />
+                <div>
+                  <div class="font-medium text-white line-clamp-1">
+                    {{ booking.property?.title || 'Property #' +
+                    booking.propertyId }}
+                  </div>
+                  <div class="text-[11px] text-neutral-500">
+                    {{ booking.property?.city }}, {{ booking.property?.state }}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="p-4 text-nowrap">
+              <div class="font-medium text-white">
+                {{ booking.user?.profile?.firstName }} {{
+                booking.user?.profile?.lastName }}
+              </div>
+              <div class="text-[11px] text-neutral-500">
+                {{ booking.user?.email }}
+              </div>
+            </td>
+            <td class="p-4 text-nowrap">
+              <div>
+                {{ booking.checkIn | date: 'mediumDate' }} - {{ booking.checkOut
+                | date: 'mediumDate' }}
+              </div>
+              <div class="text-[11px] text-neutral-500">
+                {{ booking.nights }} night(s) • {{ booking.guests }} guest(s)
+              </div>
+            </td>
+            <td class="p-4 font-medium text-white">
+              {{ booking.total | currency: 'NGN' : 'symbol-narrow' : '1.0-0' }}
+            </td>
+            <td class="p-4">
+              <span
+                class="px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border"
+                [ngClass]="getStatusClass(booking.status)"
+              >
+                {{ booking.status }}
+              </span>
+            </td>
+            <td class="p-4 text-right">
+              <a
+                [routerLink]="['/dashboard/bookings/booking-info', booking.id]"
+                class="px-3 text-nowrap py-1.5 bg-[#1a1a1a] hover:bg-[#262626] text-neutral-300 rounded text-xs transition border border-[#333] inline-block"
+              >
+                View Details
+              </a>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="p-4 border-t border-[#262626] flex items-center justify-between text-xs text-neutral-400"
+    >
+      <div>
+        Showing page
+        <span class="text-white font-medium"
+          >{{ pagination().currentPage }}</span
+        >
+        of
+        <span class="text-white font-medium"
+          >{{ pagination().totalPages }}</span
+        >
+        (<span class="text-white font-medium">{{ pagination().total }}</span>
+        total bookings)
+      </div>
+      <div class="flex gap-2">
+        <button
+          [disabled]="!pagination().hasPrevPage"
+          (click)="changePage(pagination().currentPage - 1)"
+          class="px-3 py-1.5 bg-[#1a1a1a] border border-[#333] rounded hover:bg-[#262626] text-neutral-300 disabled:opacity-40 disabled:cursor-not-allowed transition"
+        >
+          Previous
+        </button>
+        <button
+          [disabled]="!pagination().hasNextPage"
+          (click)="changePage(pagination().currentPage + 1)"
+          class="px-3 py-1.5 bg-[#1a1a1a] border border-[#333] rounded hover:bg-[#262626] text-neutral-300 disabled:opacity-40 disabled:cursor-not-allowed transition"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>

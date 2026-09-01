@@ -70,6 +70,13 @@ export const routes: Routes = [
           import('./dashboard/bookings/bookings').then((m) => m.Bookings),
       },
       {
+        path: 'bookings/booking-info/:bookingId',
+        loadComponent: () =>
+          import('./dashboard/bookings/booking-info/booking-info').then(
+            (m) => m.BookingInfo,
+          ),
+      },
+      {
         path: 'properties',
         loadComponent: () =>
           import('./dashboard/properties/properties').then((m) => m.Properties),

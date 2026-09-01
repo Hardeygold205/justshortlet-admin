@@ -24,6 +24,7 @@ export class Dashboard {
     '/dashboard/profile': 'Profile',
     '/dashboard/settings': 'Settings',
     '/dashboard/bookings': 'Bookings',
+    '/dashboard/bookings/booking-info': 'Booking Details',
     '/dashboard/properties': 'Properties',
     '/dashboard/properties/property-info': 'Property Details',
   };
