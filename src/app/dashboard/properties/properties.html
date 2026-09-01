@@ -160,9 +160,9 @@
             <span
               class="py-1 text-[10px] font-semibold tracking-wide uppercase inline-flex items-center gap-1.5"
               [ngClass]="{
-                    ' text-emerald-400 border border-emerald-800/50': property.status === 'PUBLISHED',
-                    ' text-amber-400 border border-amber-800/50': property.status === 'PENDING_REVIEW',
-                    ' text-rose-400 border border-rose-800/50': property.status === 'REJECTED' || property.status === 'SUSPENDED',
+                    ' text-emerald-400': property.status === 'PUBLISHED',
+                    ' text-amber-400': property.status === 'PENDING_REVIEW',
+                    ' text-rose-400': property.status === 'REJECTED' || property.status === 'SUSPENDED',
                     ' text-neutral-400': property.status === 'DRAFT' || property.status === 'ARCHIVED'
                   }"
             >
