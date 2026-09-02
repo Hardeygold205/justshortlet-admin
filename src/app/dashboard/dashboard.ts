@@ -16,25 +16,40 @@ export class Dashboard {
   sidebarCollapsed = signal(false);
   pageTitle = signal('Overview');
 
-  private titleMap: Record<string, string> = {
-    '/dashboard': 'Overview',
-    '/dashboard/admins': 'Admin Management',
-    '/dashboard/guests': 'Guests Management',
-    '/dashboard/hosts': 'Hosts Management',
-    '/dashboard/profile': 'Profile',
-    '/dashboard/settings': 'Settings',
-    '/dashboard/bookings': 'Bookings',
-    '/dashboard/bookings/booking-info': 'Booking Details',
-    '/dashboard/properties': 'Properties',
-    '/dashboard/properties/property-info': 'Property Details',
-  };
-
   constructor(private router: Router) {
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe((e) => {
-        this.pageTitle.set(this.titleMap[e.urlAfterRedirects] || 'Dashboard');
+        this.pageTitle.set(this.resolveTitle(e.urlAfterRedirects));
       });
+  }
+
+  private resolveTitle(url: string): string {
+    const path = url.split('?')[0];
+
+    if (/^\/dashboard\/profile\/[^/]+$/.test(path)) {
+      return 'Profile';
+    }
+    if (/^\/dashboard\/bookings\/booking-info\/[^/]+$/.test(path)) {
+      return 'Booking Details';
+    }
+    if (/^\/dashboard\/properties\/property-info\/[^/]+$/.test(path)) {
+      return 'Property Details';
+    }
+
+    const staticTitles: Record<string, string> = {
+      '/dashboard': 'Overview',
+      '/dashboard/admins': 'Admin',
+      '/dashboard/guests': 'Guests',
+      '/dashboard/hosts': 'Hosts',
+      '/dashboard/settings': 'Settings',
+      '/dashboard/recent-activity': 'Activities',
+      '/dashboard/bookings': 'Bookings',
+      '/dashboard/properties': 'Properties',
+      '/dashboard/amenities': 'Amenities',
+    };
+
+    return staticTitles[path] || 'Dashboard';
   }
 
   toggleSidebar(): void {

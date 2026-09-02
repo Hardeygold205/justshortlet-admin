@@ -1,4 +1,6 @@
-<div class="overview">
+<div
+  class="overview p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto space-y-6"
+>
   <div class="welcome">
     <h1>Welcome back</h1>
     <p>
@@ -239,7 +241,7 @@
       </div>
       <div class="stat-body">
         <span class="stat-value">{{ stats().publishedProperties }}</span>
-        <span class="stat-label">Published</span>
+        <span class="stat-label">Property Published</span>
       </div>
     </a>
 
@@ -370,7 +372,7 @@
         <tbody>
           @for (activity of recentActivities(); track activity.id) {
           <tr>
-            <td>{{ activity.description }}</td>
+            <td class="whitespace-nowrap">{{ activity.description }}</td>
             <td><span class="badge">{{ activity.type }}</span></td>
             <td
               class="text-muted"
@@ -378,7 +380,7 @@
             >
               {{ activity.category }}
             </td>
-            <td class="text-muted">{{ activity.createdAt | date:'short' }}</td>
+            <td class="text-muted whitespace-nowrap">{{ activity.createdAt | date:'short' }}</td>
           </tr>
           }
         </tbody>
@@ -405,7 +407,7 @@
             <th>Email</th>
             <th>Role</th>
             <th>Status</th>
-            <th>Created At</th>
+            <th class="whitespace-nowrap">Created At</th>
           </tr>
         </thead>
         <tbody>
@@ -428,7 +430,7 @@
                 {{ admin.status || 'ACTIVE' }}
               </span>
             </td>
-            <td class="text-muted">{{ admin.createdAt | date:'short' }}</td>
+            <td class="text-muted whitespace-nowrap">{{ admin.createdAt | date:'short' }}</td>
           </tr>
           }
         </tbody>

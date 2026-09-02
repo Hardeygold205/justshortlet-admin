@@ -1,15 +1,12 @@
 <div
   class="page-container p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto space-y-6"
 >
-  <!-- Header -->
   <div
     class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
   >
-    <div>
-      <h1 class="text-xl font-semibold text-white">Platform Bookings</h1>
-      <p class="text-xs text-neutral-400 mt-1">
-        Manage and track guest reservations platform-wide
-      </p>
+    <div class="page-header">
+      <h1>Platform Bookings</h1>
+      <p>Manage and track guest reservations platform-wide</p>
     </div>
   </div>
 
@@ -133,9 +130,21 @@
             </td>
             <td class="p-4">
               <span
-                class="px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border"
-                [ngClass]="getStatusClass(booking.status)"
+                class="py-1 text-[10px] font-semibold tracking-wide uppercase inline-flex items-center gap-1.5"
+                [ngClass]="{
+                    ' text-green-700': booking.status === 'CONFIRMED' || booking.status === 'COMPLETED',
+                    ' text-amber-400': booking.status === 'PENDING',
+                    ' text-rose-700': booking.status === 'REJECTED' || booking.status === 'CANCELLED',
+                  }"
               >
+                <span
+                  class="w-1.5 h-1.5 rounded-full"
+                  [ngClass]="{
+                      'bg-green-700': booking.status === 'CONFIRMED',
+                      'bg-amber-400': booking.status === 'PENDING',
+                      'bg-rose-700': booking.status === 'REJECTED' || booking.status === 'CANCELLED',
+                    }"
+                ></span>
                 {{ booking.status }}
               </span>
             </td>
@@ -153,7 +162,6 @@
       </table>
     </div>
 
-    <!-- Pagination -->
     <div
       class="p-4 border-t border-[#262626] flex items-center justify-between text-xs text-neutral-400"
     >

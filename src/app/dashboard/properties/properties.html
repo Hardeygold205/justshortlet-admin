@@ -2,11 +2,9 @@
   <div
     class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
   >
-    <div>
-      <h1 class="text-2xl font-bold text-neutral-100">Properties Management</h1>
-      <p class="text-sm text-neutral-400">
-        View, audit, and approve listing requests across the platform.
-      </p>
+    <div class="page-header">
+      <h1>Properties Management</h1>
+      <p>View, audit, and approve listing requests across the platform.</p>
     </div>
   </div>
 
@@ -160,7 +158,7 @@
             <span
               class="py-1 text-[10px] font-semibold tracking-wide uppercase inline-flex items-center gap-1.5"
               [ngClass]="{
-                    ' text-emerald-400': property.status === 'PUBLISHED',
+                    ' text-green-700': property.status === 'PUBLISHED',
                     ' text-amber-400': property.status === 'PENDING_REVIEW',
                     ' text-rose-400': property.status === 'REJECTED' || property.status === 'SUSPENDED',
                     ' text-neutral-400': property.status === 'DRAFT' || property.status === 'ARCHIVED'
@@ -169,7 +167,7 @@
               <span
                 class="w-1.5 h-1.5 rounded-full"
                 [ngClass]="{
-                      'bg-emerald-400': property.status === 'PUBLISHED',
+                      'bg-green-700': property.status === 'PUBLISHED',
                       'bg-amber-400': property.status === 'PENDING_REVIEW',
                       'bg-rose-400': property.status === 'REJECTED' || property.status === 'SUSPENDED',
                       'bg-neutral-400': property.status === 'DRAFT' || property.status === 'ARCHIVED'

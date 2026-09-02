@@ -1,22 +1,16 @@
 <div class="admins-page p-3 md:p-4 lg:p-5 xl:p-6 2xl:p-10 max-w-full mx-auto">
-  <div class="page-header">
-    <div>
-      <h1>Admins</h1>
+  <div
+    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
+  >
+    <div class="page-header">
+      <h1>Admins Management</h1>
       <p>Create, update, and manage administrator accounts.</p>
     </div>
-    <button class="btn-primary" (click)="openCreate()">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-      >
-        <line x1="12" y1="5" x2="12" y2="19" />
-        <line x1="5" y1="12" x2="19" y2="12" />
-      </svg>
-      Add Admin
+    <button
+      class="bg-white hover:bg-neutral-200 text-black font-semibold px-4 py-3 cursor-pointer rounded-lg text-xs transition"
+      (click)="openCreate()"
+    >
+      + Add Admin
     </button>
   </div>
 
@@ -31,7 +25,7 @@
     <button class="btn-secondary" (click)="loadAdmins()">Retry</button>
   </div>
   } @else {
-  <div class="card">
+  <div class="card overflow-x-auto">
     <div class="table-wrap">
       <table>
         <thead>
@@ -173,9 +167,7 @@
     </form>
   </div>
 </div>
-}
-
-@if (showEditModal()) {
+} @if (showEditModal()) {
 <div class="modal-backdrop" (click)="closeModals()">
   <div class="modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -221,9 +213,7 @@
     </form>
   </div>
 </div>
-}
-
-@if (showDeleteModal()) {
+} @if (showDeleteModal()) {
 <div class="modal-backdrop" (click)="closeModals()">
   <div class="modal modal-sm" (click)="$event.stopPropagation()">
     <div class="modal-header">
