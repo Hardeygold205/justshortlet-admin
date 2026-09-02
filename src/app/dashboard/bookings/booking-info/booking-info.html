@@ -183,38 +183,54 @@
         </div>
       </div>
 
-      <!-- Audit Timeline Card -->
       <div
         class="p-6 bg-[#121212] border border-[#262626] rounded-xl space-y-3 text-xs"
       >
         <h2 class="text-sm font-semibold text-neutral-300">Audit Timeline</h2>
         <div class="space-y-2">
           <div>
-            <span class="text-neutral-500 block">Created At</span>
+            <span class="text-neutral-500 block">Created at:</span>
             <span class="text-neutral-300"
               >{{ b.createdAt | date: 'medium' }}</span
             >
           </div>
           @if (b.confirmedAt) {
           <div>
-            <span class="text-neutral-500 block">Confirmed At</span>
+            <span class="text-neutral-500 block">Confirmed at:</span>
             <span class="text-neutral-300"
               >{{ b.confirmedAt | date: 'medium' }}</span
             >
           </div>
+          } @else if (b.cancelledAt) {
+          <div>
+            <span class="text-neutral-500 block">Cancelled at:</span>
+            <span class="text-rose-400"
+              >{{ b.cancelledAt | date: 'medium' }}</span
+            >
+          </div>
+          } @else {
+          <div>
+            <span class="text-neutral-500 block">Rejected at:</span>
+            <span class="text-rose-400"
+              >{{ b.updatedAt | date: 'medium' }}</span
+            >
+          </div>
           } @if (b.completedAt) {
           <div>
-            <span class="text-neutral-500 block">Completed At</span>
+            <span class="text-neutral-500 block">Completed at:</span>
             <span class="text-neutral-300"
               >{{ b.completedAt | date: 'medium' }}</span
             >
           </div>
-          } @if (b.cancelledAt) {
+          } @if (b.cancellationReason) {
           <div>
-            <span class="text-neutral-500 block">Cancelled At</span>
-            <span class="text-rose-400"
-              >{{ b.cancelledAt | date: 'medium' }}</span
-            >
+            <span class="text-neutral-500 block">Reason:</span>
+            <span class="text-neutral-300">{{ b.cancellationReason }}</span>
+          </div>
+          } @if (b.hostNote) {
+          <div>
+            <span class="text-neutral-500 block">Host Note:</span>
+            <span class="text-neutral-300">{{ b.hostNote }}</span>
           </div>
           }
         </div>
