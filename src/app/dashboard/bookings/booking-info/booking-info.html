@@ -6,8 +6,9 @@
   </div>
 
   @if (isLoading()) {
-  <div class="p-12 text-center text-xs text-neutral-500">
-    Loading booking information...
+  <div class="state">
+    <div class="spinner"></div>
+    <p>Loading booking information...</p>
   </div>
   } @else if (!booking()) {
   <div class="p-12 text-center text-xs text-rose-400">
@@ -19,7 +20,7 @@
     class="p-6 bg-[#121212] border border-[#262626] rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6"
   >
     <div class="space-y-1">
-      <div class="flex items-center gap-3">
+      <div class="flex gap-3 align-top items-start">
         <h1 class="text-lg font-semibold text-white">Booking #{{ b.id }}</h1>
         <span
           class="px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border"

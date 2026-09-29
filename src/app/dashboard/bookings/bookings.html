@@ -10,10 +10,8 @@
     </div>
   </div>
 
-  <!-- Filters Bar -->
   <div class="p-4 bg-[#121212] border border-[#262626] rounded-xl space-y-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      <!-- Status Filter -->
       <div>
         <label class="block text-xs font-medium text-neutral-400 mb-1"
           >Booking Status</label
@@ -61,12 +59,13 @@
     </div>
   </div>
 
-  <!-- Table Container -->
   <div class="bg-[#121212] border border-[#262626] rounded-xl overflow-hidden">
     @if (isLoading()) {
-    <div class="p-12 text-center text-xs text-neutral-500">
-      Loading platform bookings...
+    <div class="state">
+      <div class="spinner"></div>
+      <p>Loading bookings...</p>
     </div>
+
     } @else if (bookings().length === 0) {
     <div class="p-12 text-center text-xs text-neutral-500">
       No bookings found matching your search query.
